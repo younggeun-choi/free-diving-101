@@ -1,0 +1,44 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ],
+      "@/entities/*": [
+        "src/entities/*"
+      ],
+      "@/features/*": [
+        "src/features/*"
+      ],
+      "@/widgets/*": [
+        "src/widgets/*"
+      ],
+      "@/shared/*": [
+        "src/shared/*"
+      ],
+      "@/stores/*": [
+        "src/stores/*"
+      ],
+      "@/lib/*": [
+        "src/lib/*"
+      ],
+      "@/hooks/*": [
+        "src/hooks/*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
