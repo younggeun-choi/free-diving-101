@@ -13,13 +13,150 @@
     "title": "Home"
   },
   "equalizing": {
-    "title": "Equalizing Training"
+    "title": "Equalizing Training",
+    "overview": {
+      "title": "What is Frenzel?",
+      "content": "Frenzel Equalizing is a technique where you close the glottis and push air to the middle ear using the tongue. It is primarily used for deep diving in head-first position."
+    },
+    "principle": {
+      "title": "Principle of Frenzel",
+      "content": "Frenzel works through the coordination of three main muscles",
+      "glottis": "Glottis: Closes the airway to the lungs to prevent air from escaping, while maintaining a relaxed state without tension in the neck.",
+      "softPalate": "Soft Palate: Keeps the airway to the nose open so air can be delivered to the middle ear (Eustachian tube).",
+      "tongue": "Tongue: Acts as a piston, pushing air upward through the mouth to deliver it to the middle ear via the Eustachian tube."
+    },
+    "comparison": {
+      "title": "Valsalva vs Frenzel",
+      "valsalva": "Valsalva",
+      "frenzel": "Frenzel",
+      "airSource": "Air Source",
+      "valsalvaAirSource": "Air from lungs",
+      "frenzelAirSource": "Air from mouth",
+      "glottisState": "Glottis State",
+      "valsalvaGlottis": "Open",
+      "frenzelGlottis": "Closed",
+      "mechanism": "Mechanism",
+      "valsalvaMechanism": "Chest compression (abdominal + diaphragm)",
+      "frenzelMechanism": "Tongue piston action",
+      "depth": "Suitable Depth",
+      "valsalvaDepth": "Shallow depths (~15m)",
+      "frenzelDepth": "Deep depths (15m+)",
+      "headPosition": "Head Position",
+      "valsalvaHead": "Favorable for feet-first",
+      "frenzelHead": "Essential for head-first"
+    },
+    "day1": {
+      "title": "Understanding Glottis",
+      "goal": "Recognize the sensation of closing the glottis clearly.",
+      "step1": "Take a deep breath through your mouth and hold it.",
+      "step2": "Feel the sensation of your throat locking.",
+      "step3": "Touch your neck with your hand to ensure it doesn't expand.",
+      "step4": "Try to exhale through your nose while holding your breath. (Success if no air moves)",
+      "step5": "Make an \"ahh\" sound while alternating between opening/closing 10 times.",
+      "success": "Breath is held, neck is relaxed, and no air sound."
+    },
+    "day2": {
+      "title": "Advanced Glottis Control",
+      "goal": "Consciously control opening and closing of the glottis.",
+      "step1": "Breathe in through your mouth and close the glottis.",
+      "step2": "Hold for 5 seconds then open with \"ahh\".",
+      "step3": "Practice alternating closed ↔ open to learn the difference.",
+      "step4": "Ensure only the glottis works without neck tension.",
+      "success": "Breath stops with a quiet neck, air flows smoothly when opened."
+    },
+    "day3": {
+      "title": "Understanding Soft Palate",
+      "goal": "Distinguish between opening and closing of the nasal passage (soft palate).",
+      "step1": "Breathe through your nose → open.",
+      "step2": "Breathe only through your mouth → closed.",
+      "step3": "Make an \"ng\" sound and check if you feel nasal vibration.",
+      "step4": "If vibration disappears when nose is blocked with \"ng\" sound, it's closed.",
+      "success": "Feel the passage behind the nose 'opening' when open."
+    },
+    "day4": {
+      "title": "Advanced Soft Palate Control",
+      "goal": "Freely switch between opening and closing the soft palate.",
+      "step1": "Alternate \"ng\" ↔ \"ah\" vocalization.",
+      "step2": "Mimic yawning and learn the sensation of widening the nasal passage.",
+      "step3": "Recognize that nasal vibration means open, no vibration means closed.",
+      "success": "Clear and free transition between opening and closing of nasal passage."
+    },
+    "day5": {
+      "title": "Basic K/T Tongue Movement",
+      "goal": "Learn tongue position and air pushing motion.",
+      "step1": "Close glottis and close your mouth.",
+      "step2": "Press and release the back of tongue (K position) against the palate.",
+      "step3": "Lightly push with the front of tongue (T position) and feel the difference.",
+      "step4": "Silently repeat \"K–K–K\" (10 reps × 3 sets).",
+      "success": "Slight pressure sensation in ears or back of nose, quiet neck."
+    },
+    "day6": {
+      "title": "Tongue Piston Pressure Control",
+      "goal": "Control air pressure consistently with tongue movement.",
+      "step1": "Close glottis + keep soft palate open.",
+      "step2": "Push air with K tongue motion.",
+      "step3": "Repeat in \"K–K–K–K\" rhythm.",
+      "step4": "Check for uniform pressure and rhythm.",
+      "success": "Consistent 'pop pop' pressure in ears, steady airflow."
+    },
+    "day7": {
+      "title": "Sensory Integration Stage 1",
+      "goal": "Perform glottis closure + soft palate opening + tongue piston simultaneously.",
+      "step1": "Stop breathing and close glottis.",
+      "step2": "Open soft palate with a yawning sensation.",
+      "step3": "Perform K tongue motion.",
+      "step4": "Success when pressure is felt in ears.",
+      "step5": "In final step, lightly pinch nose and repeat same motion to learn actual pressure transfer sensation.",
+      "success": "Slight 'pop' sensation in ears without neck movement."
+    },
+    "day8": {
+      "title": "Sensory Integration Stage 2 (Rhythm)",
+      "goal": "Automate Frenzel motion with rhythm.",
+      "step1": "Keep glottis closed + soft palate open.",
+      "step2": "Repeat \"K–K–K\" with tongue.",
+      "step3": "Maintain steady rhythm and uniform pressure.",
+      "step4": "From last 5 reps, train rhythm maintenance with nose pinched.",
+      "step5": "Maintain consistent 'pop pop' sensation in ears.",
+      "success": "Steady rhythm, uniform ear pressure, no neck tension."
+    },
+    "day9": {
+      "title": "Head-first Frenzel Adaptation Stage 1",
+      "goal": "Maintain soft palate in head-down position.",
+      "step1": "Sit in chair and tilt head down 45°.",
+      "step2": "Close glottis + keep soft palate open.",
+      "step3": "Repeat K tongue motion.",
+      "step4": "Gradually adjust angle from 45° → 60°.",
+      "step5": "Perform all steps with nose pinched to learn pressure sensation similar to actual underwater environment.",
+      "success": "Nasal passage stays open and ear pressure transfers even with head down."
+    },
+    "day10": {
+      "title": "Head-first Frenzel Completion",
+      "goal": "Stable Frenzel performance even at full head-down position (90°).",
+      "step1": "Fully tilt head down (90°) and close glottis.",
+      "step2": "Perform soft palate opening + tongue K motion.",
+      "step3": "Train with nose pinched from the start.",
+      "step4": "Success when ear pressure transfers.",
+      "step5": "Repeat 10 times × 3 sets.",
+      "success": "Even with head down: relaxed neck, nasal passage open, inner ear equilibrium maintained."
+    }
   },
   "co2Table": {
     "title": "CO₂ Table Training"
   },
+  "timer": {
+    "start": "Start Training",
+    "pause": "Pause",
+    "resume": "Resume",
+    "complete": "Complete",
+    "cancel": "Cancel",
+    "paused": "(Paused)",
+    "duration": "Training Time"
+  },
   "history": {
-    "title": "History"
+    "title": "History",
+    "completed": "Completed: {{duration}} min",
+    "empty": "No completed training sessions yet.",
+    "completedAt": "Completed At"
   },
   "notFound": {
     "title": "Page Not Found",
