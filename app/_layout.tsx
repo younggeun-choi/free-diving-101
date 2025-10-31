@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, ActivityIndicator } from 'react-native';
+import { PortalHost } from '@rn-primitives/portal';
 import { initializeI18n } from '@/shared/lib/i18n';
 import '../global.css';
 
@@ -34,6 +35,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+      <PortalHost />
     </SafeAreaProvider>
   );
 }
