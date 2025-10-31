@@ -194,6 +194,112 @@ eas submit --platform ios
 
 ---
 
+## 의존성 관리 규칙
+
+### ⚠️ 필수 준수 사항
+
+Expo 프로젝트의 의존성은 매우 민감하며, 잘못된 설치 방법은 프로젝트 전체를 망가뜨릴 수 있습니다. 아래 규칙을 **반드시** 준수하세요.
+
+### 1. 패키지 설치 원칙
+
+**✅ 올바른 방법:**
+```bash
+# Expo SDK 패키지 설치 (권장)
+npx expo install [package-name]
+
+# 일반 npm 패키지
+npm install [package-name]
+```
+
+**❌ 절대 사용 금지:**
+```bash
+# 이 플래그들은 의존성 트리를 파괴합니다
+npm install --legacy-peer-deps  # 절대 사용 금지!
+npm install --force             # 절대 사용 금지!
+```
+
+### 2. Expo SDK 54 필수 의존성
+
+다음 패키지는 **반드시** devDependencies 또는 dependencies에 명시되어야 합니다:
+
+**devDependencies (필수):**
+```json
+{
+  "babel-preset-expo": "~54.0.6"  // 가장 중요! 없으면 빌드 실패
+}
+```
+
+**dependencies (SDK 54 표준):**
+```json
+{
+  "expo": "~54.0.0",
+  "expo-asset": "~12.0.9",
+  "expo-router": "~6.0.14",
+  "expo-splash-screen": "~31.0.10",
+  "expo-status-bar": "~3.0.8",
+  "expo-system-ui": "~6.0.8",
+  "react": "19.1.0",
+  "react-dom": "19.1.0",
+  "react-native": "0.81.5",
+  "react-native-gesture-handler": "~2.28.0",
+  "react-native-reanimated": "~4.1.1",
+  "react-native-safe-area-context": "~5.6.0",
+  "react-native-screens": "~4.16.0",
+  "react-native-web": "~0.21.0"
+}
+```
+
+### 3. 버전 관리 규칙
+
+**✅ 올바른 버전 지정:**
+- `~54.0.0` - SDK 버전에 맞춰 마이너 업데이트 허용
+- `19.1.0` - 정확한 버전 고정
+
+**❌ 잘못된 버전 지정:**
+- `*` - 절대 사용 금지! 예측 불가능한 버전 설치
+- `^54.0.0` - SDK 패키지에는 부적절
+
+### 4. 문제 발생 시 복구 절차
+
+의존성 오류가 발생하면 다음 순서로 진행:
+
+```bash
+# 1단계: 완전 초기화
+rm -rf node_modules package-lock.json
+
+# 2단계: 깨끗한 재설치
+npm install
+
+# 3단계: Expo 의존성 검증
+npx expo-doctor
+
+# 4단계: 개발 서버 재시작
+npx expo start --clear
+```
+
+### 5. 새 패키지 추가 시 체크리스트
+
+- [ ] Expo 공식 문서에서 SDK 54 호환 버전 확인
+- [ ] `package.json`에 정확한 버전 범위 명시
+- [ ] 설치 후 `npx expo-doctor` 실행
+- [ ] 개발 서버에서 정상 작동 확인
+
+### 6. 금지 사항
+
+1. **`@expo/vector-icons`를 직접 설치하지 마세요**
+   - `expo` 패키지에 이미 포함되어 있습니다
+   - 직접 설치하면 버전 충돌 발생
+
+2. **`babel-preset-expo`를 삭제하지 마세요**
+   - Babel이 이 preset을 찾지 못하면 빌드가 실패합니다
+   - devDependencies에 **반드시** 존재해야 합니다
+
+3. **`*` 버전을 사용하지 마세요**
+   - 예측 불가능한 버전이 설치됩니다
+   - 프로덕션 환경에서 문제를 일으킬 수 있습니다
+
+---
+
 ## Path Alias
 
 TypeScript path alias는 `tsconfig.json`에 설정되어 있습니다:
