@@ -1,4 +1,5 @@
-import { View, FlatList } from 'react-native';
+import { View, FlatList, type ViewStyle } from 'react-native';
+import type { ComponentType, ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { Text } from '@/shared/ui/text';
@@ -10,6 +11,9 @@ import type { FrenzelDay } from '@/entities/frenzel-training';
 interface DayListProps {
   completedDays: number[];
   onDayPress: (day: FrenzelDay) => void;
+  ListHeaderComponent?: ComponentType | ReactElement | null;
+  ListHeaderComponentStyle?: ViewStyle;
+  contentContainerStyle?: ViewStyle;
 }
 
 /**
@@ -20,8 +24,17 @@ interface DayListProps {
  *
  * @param completedDays - Array of completed day numbers
  * @param onDayPress - Callback when a day is pressed
+ * @param ListHeaderComponent - Optional header component (e.g., EducationAccordion)
+ * @param ListHeaderComponentStyle - Style for header wrapper
+ * @param contentContainerStyle - Style for FlatList content container
  */
-export function DayList({ completedDays, onDayPress }: DayListProps) {
+export function DayList({
+  completedDays,
+  onDayPress,
+  ListHeaderComponent,
+  ListHeaderComponentStyle,
+  contentContainerStyle,
+}: DayListProps) {
   const { t } = useTranslation();
 
   const renderDayItem = ({ item }: { item: FrenzelDay }) => {
@@ -85,7 +98,14 @@ export function DayList({ completedDays, onDayPress }: DayListProps) {
       data={FRENZEL_TRAINING_SCHEDULE}
       renderItem={renderDayItem}
       keyExtractor={(item) => `day-${item.dayNumber}`}
-      contentContainerStyle={{ paddingVertical: 8 }}
+      ListHeaderComponent={ListHeaderComponent}
+      ListHeaderComponentStyle={ListHeaderComponentStyle}
+      contentContainerStyle={
+        contentContainerStyle || {
+          paddingHorizontal: 16,
+          paddingBottom: 24,
+        }
+      }
     />
   );
 }

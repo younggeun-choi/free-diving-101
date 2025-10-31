@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { EducationAccordion, DayList, useTrainingHistory } from '@/features/frenzel-trainer';
 
@@ -7,6 +7,8 @@ import { EducationAccordion, DayList, useTrainingHistory } from '@/features/fren
  *
  * Main screen for Frenzel equalizing training.
  * Displays educational content and 10-day training schedule.
+ *
+ * Note: Uses FlatList's ListHeaderComponent to avoid ScrollView nesting warning.
  */
 export default function EqualizingScreen() {
   const router = useRouter();
@@ -17,11 +19,20 @@ export default function EqualizingScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-background">
-      <View className="p-4">
-        <EducationAccordion />
-        <DayList completedDays={completedDays} onDayPress={handleDayPress} />
-      </View>
-    </ScrollView>
+    <View className="flex-1 bg-background">
+      <DayList
+        completedDays={completedDays}
+        onDayPress={handleDayPress}
+        ListHeaderComponent={
+          <View style={{ paddingTop: 16, paddingHorizontal: 16, marginBottom: 16 }}>
+            <EducationAccordion />
+          </View>
+        }
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingBottom: 24,
+        }}
+      />
+    </View>
   );
 }
