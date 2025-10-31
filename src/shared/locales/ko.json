@@ -150,7 +150,17 @@
     "complete": "완료",
     "cancel": "취소",
     "paused": "(일시정지)",
-    "duration": "훈련 시간"
+    "duration": "훈련 시간",
+    "timeRemaining": "남은 시간",
+    "trainingTime": "훈련 시간",
+    "elapsed": "경과",
+    "percentComplete": "완료",
+    "review": "복습하기",
+    "day": "Day {{number}}",
+    "goal": "목표",
+    "trainingSteps": "훈련 단계",
+    "successCriteria": "성공 기준",
+    "minutes": "분"
   },
   "history": {
     "title": "히스토리",
@@ -161,5 +171,10 @@
   "notFound": {
     "title": "페이지를 찾을 수 없습니다",
     "goHome": "홈으로 돌아가기"
+  },
+  "notifications": {
+    "trainingComplete": "훈련 완료!",
+    "congratulations": "축하합니다! Day {{dayNumber}} 훈련을 완료했습니다.",
+    "greatJob": "훌륭합니다! Day {{dayNumber}} 프렌젤 훈련을 완료했습니다."
   }
 }
