@@ -1,7 +1,8 @@
 {
   "common": {
     "appName": "Free Diving 101",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "ok": "OK"
   },
   "tabs": {
     "home": "Home",
@@ -164,6 +165,17 @@
   },
   "history": {
     "title": "History",
+    "statistics": "Training Statistics",
+    "completedDays": "Completed Days",
+    "totalSessions": "Total Sessions",
+    "completedSessions": "Completed Sessions",
+    "completionRate": "Completion Rate",
+    "sessionHistory": "Session History",
+    "clearAll": "Clear All",
+    "noSessions": "No completed training sessions yet.",
+    "date": "Date",
+    "time": "Time",
+    "notes": "Notes",
     "completed": "Completed: {{duration}} min",
     "empty": "No completed training sessions yet.",
     "completedAt": "Completed At"

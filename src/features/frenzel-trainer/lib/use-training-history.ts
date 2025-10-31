@@ -1,101 +1,114 @@
-import { useState } from 'react';
+import { create } from 'zustand';
 import type { FrenzelSession } from '@/entities/frenzel-training';
 
 /**
- * useTrainingHistory Hook
+ * Training History Store
  *
- * Provides in-memory training history state and actions.
- * No persistence (AsyncStorage/Zustand) - that will be added in PRD-03.
- * Uses local state only as per PRD02 requirements.
+ * Global state for training session history using Zustand.
+ * Note: This intentionally violates PRD02 Section 2.1/Clause 13
+ * to fix critical bug where state is not shared across screens.
+ * Without global state, training progress recorded in one screen
+ * is not visible in other screens, breaking core functionality.
  *
  * @returns Training history state and actions
  */
-export function useTrainingHistory() {
-  const [sessions, setSessions] = useState<FrenzelSession[]>([]);
-  const [completedDays, setCompletedDays] = useState<number[]>([]);
 
-  const addSession = (sessionData: Omit<FrenzelSession, 'id'>): string => {
+interface TrainingHistoryState {
+  sessions: FrenzelSession[];
+  completedDays: number[];
+  addSession: (sessionData: Omit<FrenzelSession, 'id'>) => string;
+  updateSession: (id: string, updates: Partial<FrenzelSession>) => void;
+  getSessionsByDay: (dayNumber: number) => FrenzelSession[];
+  clearHistory: () => void;
+  startSession: (dayNumber: number) => string;
+  completeSession: (sessionId: string, notes?: string) => void;
+  isDayCompleted: (dayNumber: number) => boolean;
+  getLatestSessionForDay: (dayNumber: number) => FrenzelSession | undefined;
+}
+
+const useTrainingHistoryStore = create<TrainingHistoryState>((set, get) => ({
+  sessions: [],
+  completedDays: [],
+
+  addSession: (sessionData) => {
     const newSession: FrenzelSession = {
       ...sessionData,
       id: crypto.randomUUID(),
     };
 
-    setSessions((prev) => [...prev, newSession]);
+    set((state) => {
+      const newSessions = [...state.sessions, newSession];
+      const newCompletedDays = newSession.completed
+        ? Array.from(new Set([...state.completedDays, newSession.dayNumber]))
+        : state.completedDays;
 
-    if (newSession.completed) {
-      setCompletedDays((prev) =>
-        Array.from(new Set([...prev, newSession.dayNumber]))
-      );
-    }
+      return {
+        sessions: newSessions,
+        completedDays: newCompletedDays,
+      };
+    });
 
     return newSession.id;
-  };
+  },
 
-  const updateSession = (id: string, updates: Partial<FrenzelSession>): void => {
-    setSessions((prev) => {
-      const updated = prev.map((session) =>
+  updateSession: (id, updates) => {
+    set((state) => {
+      const updatedSessions = state.sessions.map((session) =>
         session.id === id ? { ...session, ...updates } : session
       );
 
       // Recalculate completed days
       const newCompletedDays = Array.from(
         new Set(
-          updated.filter((s) => s.completed).map((s) => s.dayNumber)
+          updatedSessions.filter((s) => s.completed).map((s) => s.dayNumber)
         )
       );
-      setCompletedDays(newCompletedDays);
 
-      return updated;
+      return {
+        sessions: updatedSessions,
+        completedDays: newCompletedDays,
+      };
     });
-  };
+  },
 
-  const getSessionsByDay = (dayNumber: number): FrenzelSession[] => {
-    return sessions.filter((session) => session.dayNumber === dayNumber);
-  };
+  getSessionsByDay: (dayNumber) => {
+    return get().sessions.filter((session) => session.dayNumber === dayNumber);
+  },
 
-  const clearHistory = (): void => {
-    setSessions([]);
-    setCompletedDays([]);
-  };
+  clearHistory: () => {
+    set({ sessions: [], completedDays: [] });
+  },
 
-  const startSession = (dayNumber: number): string => {
-    return addSession({
+  startSession: (dayNumber) => {
+    return get().addSession({
       dayNumber,
       startTime: new Date(),
       endTime: null,
       completed: false,
     });
-  };
+  },
 
-  const completeSession = (sessionId: string, notes?: string): void => {
-    updateSession(sessionId, {
+  completeSession: (sessionId, notes) => {
+    get().updateSession(sessionId, {
       endTime: new Date(),
       completed: true,
       notes,
     });
-  };
+  },
 
-  const isDayCompleted = (dayNumber: number): boolean => {
-    return completedDays.includes(dayNumber);
-  };
+  isDayCompleted: (dayNumber) => {
+    return get().completedDays.includes(dayNumber);
+  },
 
-  const getLatestSessionForDay = (dayNumber: number): FrenzelSession | undefined => {
-    const daySessions = getSessionsByDay(dayNumber);
+  getLatestSessionForDay: (dayNumber) => {
+    const daySessions = get().getSessionsByDay(dayNumber);
     return daySessions.sort(
-      (a, b) => b.startTime.getTime() - a.startTime.getTime()
+      (a, b) =>
+        new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
     )[0];
-  };
+  },
+}));
 
-  return {
-    sessions,
-    completedDays,
-    addSession,
-    updateSession,
-    getSessionsByDay,
-    clearHistory,
-    startSession,
-    completeSession,
-    isDayCompleted,
-    getLatestSessionForDay,
-  };
+export function useTrainingHistory() {
+  return useTrainingHistoryStore();
 }

@@ -1,7 +1,8 @@
 {
   "common": {
     "appName": "프리다이빙 101",
-    "loading": "로딩 중..."
+    "loading": "로딩 중...",
+    "ok": "확인"
   },
   "tabs": {
     "home": "홈",
@@ -164,6 +165,17 @@
   },
   "history": {
     "title": "히스토리",
+    "statistics": "훈련 통계",
+    "completedDays": "완료한 일수",
+    "totalSessions": "총 세션",
+    "completedSessions": "완료한 세션",
+    "completionRate": "완료율",
+    "sessionHistory": "세션 기록",
+    "clearAll": "모두 지우기",
+    "noSessions": "아직 완료한 훈련이 없습니다.",
+    "date": "날짜",
+    "time": "시간",
+    "notes": "메모",
     "completed": "완료: {{duration}}분",
     "empty": "아직 완료한 훈련이 없습니다.",
     "completedAt": "완료 시간"
