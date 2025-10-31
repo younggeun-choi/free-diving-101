@@ -33,6 +33,13 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="training"
+          options={{
+            headerShown: false,
+            headerBackTitle: '',
+          }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <PortalHost />
