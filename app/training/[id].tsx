@@ -138,7 +138,6 @@ export default function TrainingScreen() {
   return (
     <ScrollView className="flex-1 bg-background">
       <View className="p-4">
-        <DayDetailCard day={day} isCompleted={isCompleted} />
         <TrainingTimer
           day={day}
           elapsedSeconds={elapsedSeconds}
@@ -150,6 +149,7 @@ export default function TrainingScreen() {
           onComplete={complete}
           onCancel={handleTimerCancel}
         />
+        <DayDetailCard day={day} isCompleted={isCompleted} />
       </View>
     </ScrollView>
   );
