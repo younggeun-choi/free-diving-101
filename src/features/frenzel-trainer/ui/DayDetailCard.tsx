@@ -46,7 +46,7 @@ export function DayDetailCard({ day, isCompleted }: DayDetailCardProps) {
           <View className="gap-4">
             {/* Goal Section */}
             <View>
-              <Text variant="small" className="font-semibold mb-2">
+              <Text variant="h4">
                 🎯 {t('timer.goal')}
               </Text>
               <Text variant="p" className="text-muted-foreground">
@@ -58,17 +58,12 @@ export function DayDetailCard({ day, isCompleted }: DayDetailCardProps) {
 
             {/* Training Steps */}
             <View>
-              <Text variant="small" className="font-semibold mb-3">
+              <Text variant="h4" className="mb-4">
                 📋 {t('timer.trainingSteps')}
               </Text>
               <View className="gap-3">
                 {day.steps.map((step, index) => (
                   <View key={`step-${index}`} className="flex-row gap-2 items-center">
-                    <View className="w-6 h-6 rounded-full bg-primary/20 items-center justify-center">
-                      <Text variant="small" className="font-semibold">
-                        
-                      </Text>
-                    </View>
                     <Text className="flex-1 text-muted-foreground">
                       {index + 1}. {t(step)}
                     </Text>
@@ -81,7 +76,7 @@ export function DayDetailCard({ day, isCompleted }: DayDetailCardProps) {
 
             {/* Success Criteria */}
             <View>
-              <Text variant="small" className="font-semibold mb-2">
+              <Text variant="h4">
                 ✅ {t('timer.successCriteria')}
               </Text>
               <Text variant="p" className="text-muted-foreground">
@@ -93,7 +88,7 @@ export function DayDetailCard({ day, isCompleted }: DayDetailCardProps) {
 
             {/* Duration */}
             <View>
-              <Text variant="small" className="font-semibold mb-2">
+              <Text variant="h4">
                 ⏱️ {t('timer.duration')}
               </Text>
               <Text variant="p" className="text-muted-foreground">
