@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { randomUUID } from 'expo-crypto';
 import type { FrenzelSession } from '@/entities/frenzel-training';
 
 /**
@@ -33,7 +34,7 @@ const useTrainingHistoryStore = create<TrainingHistoryState>((set, get) => ({
   addSession: (sessionData) => {
     const newSession: FrenzelSession = {
       ...sessionData,
-      id: crypto.randomUUID(),
+      id: randomUUID(),
     };
 
     set((state) => {
