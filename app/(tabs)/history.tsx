@@ -1,10 +1,13 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/text';
 
 export default function HistoryScreen() {
+  const { t } = useTranslation();
+
   return (
     <View className="flex-1 justify-center items-center bg-white">
-      <Text variant="h2">히스토리</Text>
+      <Text variant="h2">{t('history.title')}</Text>
     </View>
   );
 }

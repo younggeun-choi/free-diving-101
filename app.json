@@ -34,7 +34,8 @@
     "scheme": "freediving101",
     "plugins": [
       "expo-router",
-      "expo-asset"
+      "expo-asset",
+      "expo-localization"
     ]
   }
 }

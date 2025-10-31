@@ -1,0 +1,28 @@
+{
+  "common": {
+    "appName": "프리다이빙 101",
+    "loading": "로딩 중..."
+  },
+  "tabs": {
+    "home": "홈",
+    "equalizing": "이퀄라이징",
+    "co2Table": "CO₂ 테이블",
+    "history": "히스토리"
+  },
+  "home": {
+    "title": "홈"
+  },
+  "equalizing": {
+    "title": "이퀄라이징 훈련"
+  },
+  "co2Table": {
+    "title": "CO₂ 테이블 훈련"
+  },
+  "history": {
+    "title": "히스토리"
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없습니다",
+    "goHome": "홈으로 돌아가기"
+  }
+}

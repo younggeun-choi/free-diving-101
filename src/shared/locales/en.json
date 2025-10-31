@@ -1,0 +1,28 @@
+{
+  "common": {
+    "appName": "Free Diving 101",
+    "loading": "Loading..."
+  },
+  "tabs": {
+    "home": "Home",
+    "equalizing": "Equalizing",
+    "co2Table": "CO₂ Table",
+    "history": "History"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "equalizing": {
+    "title": "Equalizing Training"
+  },
+  "co2Table": {
+    "title": "CO₂ Table Training"
+  },
+  "history": {
+    "title": "History"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "goHome": "Go Home"
+  }
+}

@@ -277,14 +277,84 @@ npx expo-doctor
 npx expo start --clear
 ```
 
-### 5. 새 패키지 추가 시 체크리스트
+### 5. Claude Code 패키지 설치 워크플로우 (필수)
 
-- [ ] Expo 공식 문서에서 SDK 54 호환 버전 확인
+**⚠️ 중요**: Claude Code는 패키지를 설치하기 **전에** 반드시 다음 단계를 따라야 합니다.
+
+#### 단계 1: Codex와 상의
+```bash
+# Background에서 Codex 실행 중인지 확인
+# Codex가 package.json 분석 및 누락된 패키지 식별
+```
+
+#### 단계 2: Context7 또는 WebSearch로 검증
+새 패키지 설치 시:
+1. **Context7 사용** (우선):
+   ```
+   mcp__context7__resolve-library-id → 라이브러리 ID 확인
+   mcp__context7__get-library-docs → 문서 및 호환 버전 확인
+   ```
+
+2. **Context7 실패 시 WebSearch 사용**:
+   - Expo SDK 54 호환성 검색
+   - 공식 문서에서 권장 버전 확인
+   - npm 페이지에서 최신 안정 버전 확인
+
+#### 단계 3: 버전 검증
+- Expo SDK 패키지: `npx expo install [package]` 사용 (자동 버전 매칭)
+- Expo 공식 문서 또는 Context7에서 확인한 버전 사용
+- `*` 버전 절대 사용 금지
+
+#### 단계 4: 설치 실행
+```bash
+# Expo SDK 패키지
+npx expo install [package-name]
+
+# 일반 npm 패키지 (검증된 버전으로)
+npm install [package-name]@[verified-version]
+```
+
+#### 단계 5: 설치 후 검증
+```bash
+# 의존성 검증
+npx expo-doctor
+
+# TypeScript 타입 체킹
+npx tsc --noEmit
+```
+
+#### 예시: i18n 패키지 설치
+
+**잘못된 방법** ❌:
+```bash
+# 검증 없이 바로 설치
+npx expo install expo-localization i18next react-i18next
+```
+
+**올바른 방법** ✅:
+```bash
+# 1. Codex 결과 확인 (background bash 확인)
+# 2. Context7/WebSearch로 검증:
+#    - expo-localization: ~17.0.7 (SDK 54 bundled)
+#    - i18next: latest stable
+#    - react-i18next: latest stable
+# 3. 검증된 버전으로 설치
+npx expo install expo-localization  # Expo가 자동으로 ~17.0.7 설치
+npm install i18next@23.16.8 react-i18next@15.1.3
+# 4. 검증
+npx expo-doctor
+```
+
+### 6. 새 패키지 추가 시 체크리스트
+
+- [ ] Codex와 상의하여 현재 package.json 상태 확인
+- [ ] Context7 또는 WebSearch로 SDK 54 호환 버전 검증
 - [ ] `package.json`에 정확한 버전 범위 명시
 - [ ] 설치 후 `npx expo-doctor` 실행
+- [ ] TypeScript 타입 체킹 실행
 - [ ] 개발 서버에서 정상 작동 확인
 
-### 6. 금지 사항
+### 7. 금지 사항
 
 1. **`@expo/vector-icons`를 직접 설치하지 마세요**
    - `expo` 패키지에 이미 포함되어 있습니다
@@ -767,6 +837,152 @@ npx expo install --fix
 # 특정 패키지 업데이트
 npx expo install [package-name]@latest
 ```
+
+---
+
+## 다국어 지원 (Internationalization)
+
+이 프로젝트는 `i18next` + `react-i18next` + `expo-localization`을 사용하여 다국어를 지원합니다.
+
+### 지원 언어
+
+- **영어 (en)**: 기본 fallback 언어
+- **한국어 (ko)**: 지원 언어
+
+### 패키지
+
+- `expo-localization`: ~17.0.7 - 기기 언어 감지
+- `i18next`: ^25.6.0 - i18n 프레임워크
+- `react-i18next`: ^16.0.1 - React 통합
+- `@react-native-async-storage/async-storage`: 2.2.0 - 사용자 언어 선택 저장
+
+### 파일 구조
+
+```
+src/shared/
+├── locales/
+│   ├── en.json          # 영어 번역
+│   ├── ko.json          # 한국어 번역
+│   └── index.ts         # 번역 리소스 export
+└── lib/i18n/
+    ├── config.ts        # i18n 초기화 및 설정
+    └── index.ts         # i18n export
+```
+
+### 사용법
+
+#### 컴포넌트에서 번역 사용
+
+```tsx
+import { useTranslation } from 'react-i18next';
+
+export function WelcomeScreen() {
+  const { t } = useTranslation();
+
+  return (
+    <View>
+      <Text>{t('home.title')}</Text>
+      <Text>{t('home.subtitle')}</Text>
+    </View>
+  );
+}
+```
+
+#### 매개변수가 있는 번역
+
+```tsx
+const { t } = useTranslation();
+
+// 단수형
+<Text>{t('equalizing.day', { number: 1 })}</Text>
+// 출력: "Day 1" (en) / "1일차" (ko)
+
+// 복수형 (i18next 자동 처리)
+<Text>{t('home.streakDays', { count: 5 })}</Text>
+// 출력: "5 days streak" (en) / "5일 연속" (ko)
+```
+
+#### 언어 변경
+
+```tsx
+import { changeLanguage } from '@/shared/lib/i18n';
+
+// 언어 변경 함수
+const handleLanguageChange = async (lang: 'en' | 'ko') => {
+  try {
+    await changeLanguage(lang);
+  } catch (error) {
+    console.error('Failed to change language:', error);
+  }
+};
+```
+
+#### 현재 언어 확인
+
+```tsx
+import { getCurrentLanguage } from '@/shared/lib/i18n';
+
+const currentLang = getCurrentLanguage();
+console.log(currentLang); // 'en' 또는 'ko'
+```
+
+### 새 번역 추가
+
+1. **번역 파일 업데이트**: `src/shared/locales/en.json`과 `ko.json`에 번역 키 추가
+
+```json
+// src/shared/locales/en.json
+{
+  "newFeature": {
+    "title": "New Feature",
+    "description": "This is a new feature"
+  }
+}
+
+// src/shared/locales/ko.json
+{
+  "newFeature": {
+    "title": "새 기능",
+    "description": "이것은 새로운 기능입니다"
+  }
+}
+```
+
+2. **컴포넌트에서 사용**:
+
+```tsx
+const { t } = useTranslation();
+<Text>{t('newFeature.title')}</Text>
+```
+
+### 새 언어 추가
+
+1. **번역 파일 생성**: `src/shared/locales/ja.json` (예: 일본어)
+
+2. **locales/index.ts 업데이트**:
+
+```typescript
+import en from './en.json';
+import ko from './ko.json';
+import ja from './ja.json'; // 추가
+
+export const resources = {
+  en: { translation: en },
+  ko: { translation: ko },
+  ja: { translation: ja }, // 추가
+} as const;
+
+export type SupportedLanguage = keyof typeof resources;
+export const supportedLanguages: SupportedLanguage[] = ['en', 'ko', 'ja']; // 추가
+```
+
+### 주의사항
+
+- **i18next v25.6.0**은 `compatibilityJSON: 'v4'`를 사용합니다
+- 번역 키는 **일관성 있게** 네이밍하세요 (예: `section.subsection.key`)
+- **모든 지원 언어**에 동일한 키 구조를 유지하세요
+- 사용자가 선택한 언어는 **AsyncStorage에 자동 저장**됩니다
+- 기기 언어가 지원되지 않으면 **영어(en)**로 fallback됩니다
 
 ---
 

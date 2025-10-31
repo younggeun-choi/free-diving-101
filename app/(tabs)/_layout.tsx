@@ -1,7 +1,10 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 
 export default function TabLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -12,8 +15,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: '홈',
-          tabBarLabel: '홈',
+          title: t('home.title'),
+          tabBarLabel: t('tabs.home'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -22,8 +25,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="equalizing"
         options={{
-          title: '이퀄라이징 훈련',
-          tabBarLabel: '이퀄라이징',
+          title: t('equalizing.title'),
+          tabBarLabel: t('tabs.equalizing'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="water" size={size} color={color} />
           ),
@@ -32,8 +35,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="co2-table"
         options={{
-          title: 'CO2 테이블 훈련',
-          tabBarLabel: 'CO2 테이블',
+          title: t('co2Table.title'),
+          tabBarLabel: t('tabs.co2Table'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="timer" size={size} color={color} />
           ),
@@ -42,8 +45,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="history"
         options={{
-          title: '히스토리',
-          tabBarLabel: '히스토리',
+          title: t('history.title'),
+          tabBarLabel: t('tabs.history'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="stats-chart" size={size} color={color} />
           ),
