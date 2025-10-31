@@ -59,7 +59,7 @@ export function TrainingTimer({
   };
 
   return (
-    <Card>
+    <Card className="mb-4">
       <CardHeader>
         <View className="flex-row items-center justify-between mb-2">
           <Badge variant="default">

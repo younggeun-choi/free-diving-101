@@ -63,14 +63,14 @@ export function DayDetailCard({ day, isCompleted }: DayDetailCardProps) {
               </Text>
               <View className="gap-3">
                 {day.steps.map((step, index) => (
-                  <View key={`step-${index}`} className="flex-row gap-2">
+                  <View key={`step-${index}`} className="flex-row gap-2 items-center">
                     <View className="w-6 h-6 rounded-full bg-primary/20 items-center justify-center">
                       <Text variant="small" className="font-semibold">
-                        {index + 1}
+                        
                       </Text>
                     </View>
-                    <Text variant="small" className="flex-1 text-muted-foreground">
-                      {t(step)}
+                    <Text className="flex-1 text-muted-foreground">
+                      {index + 1}. {t(step)}
                     </Text>
                   </View>
                 ))}

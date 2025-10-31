@@ -163,6 +163,9 @@
     "successCriteria": "성공 기준",
     "minutes": "분"
   },
+  "training": {
+    "dayTitle": "{{day}}일차"
+  },
   "history": {
     "title": "히스토리",
     "statistics": "훈련 통계",

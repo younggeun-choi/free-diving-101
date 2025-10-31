@@ -163,6 +163,9 @@
     "successCriteria": "Success Criteria",
     "minutes": "minutes"
   },
+  "training": {
+    "dayTitle": "Day {{day}}"
+  },
   "history": {
     "title": "History",
     "statistics": "Training Statistics",

@@ -24,7 +24,7 @@ export default function EqualizingScreen() {
         completedDays={completedDays}
         onDayPress={handleDayPress}
         ListHeaderComponent={
-          <View style={{ paddingTop: 16, paddingHorizontal: 16, marginBottom: 16 }}>
+          <View style={{ paddingTop: 16, marginBottom: 16 }}>
             <EducationAccordion />
           </View>
         }

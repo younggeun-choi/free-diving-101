@@ -36,8 +36,9 @@ export default function RootLayout() {
         <Stack.Screen
           name="training"
           options={{
-            headerShown: false,
-            headerBackTitle: '',
+            headerShown: true,
+            presentation: 'card',
+            headerBackTitle: 'back'
           }}
         />
         <Stack.Screen name="+not-found" />

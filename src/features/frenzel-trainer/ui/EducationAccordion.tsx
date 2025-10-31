@@ -22,12 +22,12 @@ export function EducationAccordion() {
   const { t } = useTranslation();
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-2">
       <CardHeader>
         <CardTitle>{t('equalizing.title')}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Accordion type="multiple" className="gap-2">
+        <Accordion type="multiple" className="gap-1">
           {/* Overview Section */}
           <AccordionItem value="overview">
             <AccordionTrigger>

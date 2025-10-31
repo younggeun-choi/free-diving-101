@@ -1,20 +1,10 @@
-import { Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 
 /**
  * Training Stack Layout
  *
- * Configures navigation options for training screens.
+ * Simplified layout - header management delegated to root stack.
  */
 export default function TrainingLayout() {
-  return (
-    <Stack>
-      <Stack.Screen
-        name="[id]"
-        options={{
-          headerShown: false,
-          presentation: 'card',
-        }}
-      />
-    </Stack>
-  );
+  return <Slot />;
 }
