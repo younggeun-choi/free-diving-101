@@ -1,13 +1,40 @@
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { Text } from '@/shared/ui/text';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+import { EducationAccordion, DayList, useTrainingHistory } from '@/features/frenzel-trainer';
 
+/**
+ * Equalizing Training Screen
+ *
+ * Main screen for Frenzel equalizing training.
+ * Displays educational content and 10-day training schedule.
+ *
+ * Note: Uses FlatList's ListHeaderComponent to avoid ScrollView nesting warning.
+ */
 export default function EqualizingScreen() {
-  const { t } = useTranslation();
+  const router = useRouter();
+  const { completedDays } = useTrainingHistory();
+  const insets = useSafeAreaInsets();
+
+  const handleDayPress = (day: { dayNumber: number }) => {
+    router.push(`/training/${day.dayNumber}`);
+  };
 
   return (
-    <View className="flex-1 justify-center items-center bg-white">
-      <Text variant="h2">{t('equalizing.title')}</Text>
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
+      <DayList
+        completedDays={completedDays}
+        onDayPress={handleDayPress}
+        ListHeaderComponent={
+          <View style={{ paddingTop: 16, marginBottom: 16 }}>
+            <EducationAccordion />
+          </View>
+        }
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingBottom: 24,
+        }}
+      />
     </View>
   );
 }

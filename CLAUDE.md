@@ -476,6 +476,104 @@ eas submit
 5. **테스트 작성**: `__tests__/`에 테스트 추가
 6. **라우트 업데이트**: Expo Router를 사용하여 `app/`에 화면 추가
 
+### 4. Codex 워크플로우
+
+Claude Code는 OpenAI Codex를 활용하여 코드 분석, 패키지 검증, 복잡한 이슈 해결을 수행할 수 있습니다.
+
+#### Codex 사용 시기
+
+1. **패키지 설치 전 검증** (필수)
+   - `package.json` 상태 분석
+   - 누락된 의존성 식별
+   - SDK 호환성 확인
+
+2. **코드 리뷰** (권장)
+   - 기능 구현 후 코드 품질 검증
+   - 아키텍처 원칙 준수 확인
+   - 타입 안전성 및 베스트 프랙티스 검토
+
+3. **복잡한 이슈 분석** (권장)
+   - 런타임 에러 원인 파악
+   - 플랫폼별 이슈 해결
+   - 성능 병목 지점 식별
+
+#### Codex 실행 방법
+
+```bash
+# Background에서 Codex 실행 (비동기)
+echo "분석할 내용 및 질문..." | codex exec \
+  --skip-git-repo-check \
+  -m gpt-5-codex \
+  --config model_reasoning_effort="medium" \
+  --sandbox read-only \
+  --full-auto \
+  2>/dev/null
+```
+
+**실행 후 결과 확인**:
+```bash
+# 1. BashOutput으로 결과 확인
+BashOutput(bash_id)
+
+# 2. status: completed 확인 후 반드시 프로세스 종료
+KillShell(shell_id)
+```
+
+#### 리소스 관리 (필수)
+
+**⚠️ 중요**: Codex 실행 후 반드시 프로세스를 정리해야 합니다.
+
+- `BashOutput`으로 결과 확인
+- `status: completed` 확인 후 `KillShell`로 프로세스 종료
+- 여러 Codex 프로세스 실행 시 각각 개별적으로 종료
+
+```bash
+# 잘못된 예 ❌: 프로세스를 종료하지 않음
+BashOutput(bash_id)  # 결과만 확인하고 끝
+
+# 올바른 예 ✅: 프로세스 종료까지 완료
+BashOutput(bash_id)  # 결과 확인
+# status: completed 확인
+KillShell(shell_id)  # 프로세스 종료
+```
+
+#### 사용 예시
+
+**예시 1: 패키지 설치 전 검증**
+```bash
+echo "Analyze package.json and identify missing dependencies for i18n implementation.
+Check Expo SDK 54 compatibility." | codex exec --skip-git-repo-check \
+-m gpt-5-codex --config model_reasoning_effort="medium" \
+--sandbox read-only --full-auto 2>/dev/null
+```
+
+**예시 2: 코드 리뷰**
+```bash
+echo "Review src/features/frenzel-trainer implementation.
+Criteria: React Compiler compliance, TypeScript strict mode, i18n usage,
+FSD architecture." | codex exec --skip-git-repo-check \
+-m gpt-5-codex --config model_reasoning_effort="medium" \
+--sandbox read-only --full-auto 2>/dev/null
+```
+
+**예시 3: 런타임 에러 분석**
+```bash
+echo "Analyze runtime error: ReferenceError: Property 'crypto' doesn't exist.
+File: use-training-history.ts:36
+Environment: React Native (Expo SDK 54)
+Provide solution with Expo-compatible UUID generation." | codex exec \
+--skip-git-repo-check -m gpt-5-codex \
+--config model_reasoning_effort="medium" \
+--sandbox read-only --full-auto 2>/dev/null
+```
+
+#### 주의사항
+
+1. **Background 실행 필수**: Codex는 항상 background에서 실행
+2. **프로세스 정리**: 결과 확인 후 반드시 `KillShell` 실행
+3. **여러 프로세스 관리**: 동시에 여러 Codex 실행 시 각각 개별 관리
+4. **Read-only 샌드박스**: `--sandbox read-only`로 분석만 수행
+
 ---
 
 ## 코딩 규칙
