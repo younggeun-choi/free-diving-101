@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { EducationAccordion, DayList, useTrainingHistory } from '@/features/frenzel-trainer';
 
@@ -13,13 +14,14 @@ import { EducationAccordion, DayList, useTrainingHistory } from '@/features/fren
 export default function EqualizingScreen() {
   const router = useRouter();
   const { completedDays } = useTrainingHistory();
+  const insets = useSafeAreaInsets();
 
   const handleDayPress = (day: { dayNumber: number }) => {
     router.push(`/training/${day.dayNumber}`);
   };
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
       <DayList
         completedDays={completedDays}
         onDayPress={handleDayPress}

@@ -1,4 +1,5 @@
 import { View, ScrollView, FlatList } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useTrainingHistory } from '@/features/frenzel-trainer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -17,6 +18,7 @@ import type { FrenzelSession } from '@/entities/frenzel-training';
 export default function HistoryScreen() {
   const { t } = useTranslation();
   const { sessions, completedDays, clearHistory } = useTrainingHistory();
+  const insets = useSafeAreaInsets();
 
   const totalSessions = sessions.length;
   const completedSessions = sessions.filter((s) => s.completed).length;
@@ -94,7 +96,7 @@ export default function HistoryScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-background">
+    <ScrollView className="flex-1 bg-background" contentContainerStyle={{ paddingTop: insets.top }}>
       <View className="p-4">
         {/* Statistics Card */}
         <Card className="mb-4">

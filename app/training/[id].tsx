@@ -1,6 +1,6 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams, useNavigation } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
   DayDetailCard,
@@ -25,7 +25,6 @@ import type { FrenzelDay } from '@/entities/frenzel-training';
  */
 export default function TrainingScreen() {
   const router = useRouter();
-  const navigation = useNavigation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
   const { completeSession, isDayCompleted, startSession } = useTrainingHistory();
@@ -40,15 +39,6 @@ export default function TrainingScreen() {
     const foundDay = FRENZEL_TRAINING_SCHEDULE.find((d) => d.dayNumber === dayNumber);
     setDay(foundDay || null);
   }, [id]);
-
-  // Set dynamic header title
-  useLayoutEffect(() => {
-    const dayNumber = parseInt(id, 10);
-    const headerTitle = t('training.dayTitle', { day: dayNumber });
-    navigation.setOptions({
-      title: headerTitle,
-    });
-  }, [id, t, navigation]);
 
   // Request notification permissions on mount
   useEffect(() => {
