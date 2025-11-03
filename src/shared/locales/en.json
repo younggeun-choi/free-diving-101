@@ -142,7 +142,62 @@
     }
   },
   "co2Table": {
-    "title": "CO₂ Table Training"
+    "title": "CO₂ Table Training",
+    "holdTime": {
+      "label": "Hold Time Setting",
+      "decrease": "-10s",
+      "increase": "+10s",
+      "min": "Minimum time reached",
+      "max": "Maximum time reached"
+    },
+    "timer": {
+      "breathe": "Breathe",
+      "hold": "Hold",
+      "paused": "(Paused)",
+      "round": "Round {{number}}"
+    },
+    "controls": {
+      "start": "Start Training",
+      "pause": "Pause",
+      "resume": "Resume",
+      "complete": "Complete",
+      "cancel": "Cancel"
+    },
+    "cancelDialog": {
+      "title": "Cancel Training?",
+      "description": "Progress will not be saved.",
+      "confirm": "Yes, Cancel",
+      "cancel": "No"
+    },
+    "table": {
+      "totalTime": "Total Time: {{time}}",
+      "round": "Round {{number}}",
+      "breathe": "Breathe: {{time}}",
+      "hold": "Hold: {{time}}"
+    },
+    "completed": {
+      "title": "Training Completed!",
+      "message": "You have completed the CO₂ table training."
+    }
+  },
+  "tts": {
+    "breathe": "Breathe",
+    "hold": "Hold",
+    "minutes": {
+      "three": "Three minutes",
+      "two": "Two minutes",
+      "one": "One minute"
+    },
+    "seconds": {
+      "thirty": "Thirty seconds",
+      "ten": "Ten seconds",
+      "five": "Five",
+      "four": "Four",
+      "three": "Three",
+      "two": "Two",
+      "one": "One"
+    },
+    "completed": "Training completed"
   },
   "timer": {
     "start": "Start Training",

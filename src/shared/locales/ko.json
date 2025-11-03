@@ -142,7 +142,62 @@
     }
   },
   "co2Table": {
-    "title": "CO₂ 테이블 훈련"
+    "title": "CO₂ 테이블 훈련",
+    "holdTime": {
+      "label": "Hold Time 설정",
+      "decrease": "-10초",
+      "increase": "+10초",
+      "min": "최소 시간에 도달했습니다",
+      "max": "최대 시간에 도달했습니다"
+    },
+    "timer": {
+      "breathe": "숨 쉬기",
+      "hold": "숨 참기",
+      "paused": "(일시정지)",
+      "round": "Round {{number}}"
+    },
+    "controls": {
+      "start": "훈련 시작",
+      "pause": "일시정지",
+      "resume": "재개",
+      "complete": "완료",
+      "cancel": "종료"
+    },
+    "cancelDialog": {
+      "title": "훈련을 종료하시겠습니까?",
+      "description": "진행 중인 훈련이 저장되지 않습니다.",
+      "confirm": "예, 종료",
+      "cancel": "취소"
+    },
+    "table": {
+      "totalTime": "총 훈련 시간: {{time}}",
+      "round": "Round {{number}}",
+      "breathe": "숨 쉬기: {{time}}",
+      "hold": "숨 참기: {{time}}"
+    },
+    "completed": {
+      "title": "훈련 완료!",
+      "message": "CO₂ 테이블 훈련을 완료했습니다."
+    }
+  },
+  "tts": {
+    "breathe": "Breathe",
+    "hold": "Hold",
+    "minutes": {
+      "three": "Three minutes",
+      "two": "Two minutes",
+      "one": "One minute"
+    },
+    "seconds": {
+      "thirty": "Thirty seconds",
+      "ten": "Ten seconds",
+      "five": "Five",
+      "four": "Four",
+      "three": "Three",
+      "two": "Two",
+      "one": "One"
+    },
+    "completed": "Training completed"
   },
   "timer": {
     "start": "훈련 시작",
