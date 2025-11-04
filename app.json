@@ -16,7 +16,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.freediving101.app"
+      "bundleIdentifier": "com.dokahn.freediving101",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +35,15 @@
     "plugins": [
       "expo-router",
       "expo-asset",
-      "expo-localization"
-    ]
+      "expo-localization",
+      "expo-dev-client"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a8845bcf-d65a-4abd-9705-6f1a68c9c948"
+      }
+    },
+    "owner": "dokahnworks"
   }
 }
