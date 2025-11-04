@@ -9,6 +9,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // React Native Reusables 기본 테마
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -41,6 +42,43 @@ module.exports = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+        },
+        // 앱 아이콘 기반 브랜드 컬러
+        teal: {
+          50: '#E6F7F5',
+          100: '#B3E8E2',
+          200: '#8DD5CC',
+          300: '#5CBDB3',
+          400: '#3EAFA3',
+          500: '#2A9B8F',
+          600: '#1B7A7A',
+          700: '#156565',
+          800: '#0F4F4F',
+          900: '#0A3939',
+        },
+        coral: {
+          50: '#FFF0EC',
+          100: '#FFD7CC',
+          200: '#FFB59D',
+          300: '#FF9B7A',
+          400: '#FF8761',
+          500: '#F5764A',
+          600: '#E6866D',
+          700: '#CC6B51',
+          800: '#B35540',
+          900: '#994630',
+        },
+        cream: {
+          50: '#FFFBF5',
+          100: '#FFF5E1',
+          200: '#F5E6D3',
+          300: '#E8D4BB',
+          400: '#DBC4A5',
+          500: '#CEB590',
+          600: '#B8A07A',
+          700: '#9A8564',
+          800: '#7C6A4F',
+          900: '#5E503B',
         },
       },
       borderRadius: {

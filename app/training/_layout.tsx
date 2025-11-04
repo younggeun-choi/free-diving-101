@@ -18,7 +18,7 @@ export default function TrainingLayout() {
         options={{
           headerTitle: '',
           headerStyle: {
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FFF5E1',
           },
           headerShadowVisible: false,
           headerLeft: () => (

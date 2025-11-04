@@ -4,47 +4,86 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* 배경 - Cream Light */
+    --background: 40 100% 94%;
+    --foreground: 180 64% 29%;
+
+    /* 카드 - White */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 180 64% 29%;
+
+    /* Popover - White */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 191.8 100% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --popover-foreground: 180 64% 29%;
+
+    /* Primary - Teal (앱 아이콘 메인 컬러) */
+    --primary: 174 44% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Cream */
+    --secondary: 34 64% 89%;
+    --secondary-foreground: 180 64% 29%;
+
+    /* Muted - Cream */
+    --muted: 34 64% 89%;
+    --muted-foreground: 180 30% 45%;
+
+    /* Accent - Coral (앱 아이콘 액센트) */
+    --accent: 15 100% 74%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border & Input - Light Cream */
+    --border: 34 30% 85%;
+    --input: 34 30% 85%;
+
+    /* Ring - Teal */
+    --ring: 174 44% 55%;
+
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 191.8 100% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* 배경 - Dark Teal */
+    --background: 180 73% 15%;
+    --foreground: 40 100% 94%;
+
+    /* 카드 - Darker Teal */
+    --card: 180 64% 20%;
+    --card-foreground: 40 100% 94%;
+
+    /* Popover - Darker Teal */
+    --popover: 180 64% 20%;
+    --popover-foreground: 40 100% 94%;
+
+    /* Primary - Light Teal (다크 모드에서 밝은 색) */
+    --primary: 172 48% 69%;
+    --primary-foreground: 180 73% 15%;
+
+    /* Secondary - Dark Teal */
+    --secondary: 180 40% 25%;
+    --secondary-foreground: 40 100% 94%;
+
+    /* Muted */
+    --muted: 180 35% 25%;
+    --muted-foreground: 172 20% 65%;
+
+    /* Accent - Light Coral (다크 모드에서 밝은 코랄) */
+    --accent: 15 100% 81%;
+    --accent-foreground: 180 73% 15%;
+
+    /* Destructive */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 40 100% 94%;
+
+    /* Border & Input */
+    --border: 180 30% 30%;
+    --input: 180 30% 30%;
+
+    /* Ring - Light Teal */
+    --ring: 172 48% 69%;
   }
 }
