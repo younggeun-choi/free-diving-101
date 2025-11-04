@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { CO2_TABLE_BREATHE_TIMES, CO2_TABLE_ROUNDS } from '@/entities/co2-table';
 import { speakForTimer, stopSpeech, speakTrainingComplete } from './tts';
+import { getCurrentLanguage } from '@/shared/lib/i18n';
 
 interface UseCO2TableTimerOptions {
   holdTimeSeconds: number;
@@ -75,7 +76,8 @@ export function useCO2TableTimer(
 
     // TTS 발화 (단계 시작 시)
     if (isPhaseStartRef.current) {
-      speakForTimer(remainingSeconds, isBreathing, true);
+      const currentLanguage = getCurrentLanguage();
+      speakForTimer(remainingSeconds, isBreathing, true, currentLanguage);
       isPhaseStartRef.current = false;
     }
 
@@ -84,7 +86,8 @@ export function useCO2TableTimer(
         const newRemaining = prev - 1;
 
         // TTS 발화 (시간 마커)
-        speakForTimer(newRemaining, isBreathing, false);
+        const currentLanguage = getCurrentLanguage();
+        speakForTimer(newRemaining, isBreathing, false, currentLanguage);
 
         // 단계 종료 처리
         if (newRemaining <= 0) {
@@ -108,7 +111,8 @@ export function useCO2TableTimer(
             } else {
               // 훈련 완료
               setIsRunning(false);
-              speakTrainingComplete();
+              const currentLanguage = getCurrentLanguage();
+              speakTrainingComplete(currentLanguage);
               onComplete();
             }
           }

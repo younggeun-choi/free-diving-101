@@ -181,23 +181,23 @@
     }
   },
   "tts": {
-    "breathe": "Breathe",
-    "hold": "Hold",
+    "breathe": "숨 쉬세요",
+    "hold": "참으세요",
     "minutes": {
-      "three": "Three minutes",
-      "two": "Two minutes",
-      "one": "One minute"
+      "three": "삼분",
+      "two": "이분",
+      "one": "일분"
     },
     "seconds": {
-      "thirty": "Thirty seconds",
-      "ten": "Ten seconds",
-      "five": "Five",
-      "four": "Four",
-      "three": "Three",
-      "two": "Two",
-      "one": "One"
+      "thirty": "삼십초",
+      "ten": "십초",
+      "five": "오",
+      "four": "사",
+      "three": "삼",
+      "two": "이",
+      "one": "일"
     },
-    "completed": "Training completed"
+    "completed": "훈련 완료"
   },
   "timer": {
     "start": "훈련 시작",
