@@ -1,5 +1,6 @@
 import {
   CO2_TABLE_BREATHE_TIMES,
+  CO2_TABLE_ROUNDS,
   DEFAULT_HOLD_TIME_SECONDS,
   HOLD_TIME_STEP_SECONDS,
   MAX_HOLD_TIME_SECONDS,
@@ -25,19 +26,34 @@ import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTrainingHistory } from '@/stores';
 
 export default function CO2TableScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const { addSession } = useTrainingHistory();
 
   const [holdTimeSeconds, setHoldTimeSeconds] = useState(DEFAULT_HOLD_TIME_SECONDS);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [isTrainingComplete, setIsTrainingComplete] = useState(false);
+  const [trainingStartTime, setTrainingStartTime] = useState<Date | null>(null);
 
   const handleComplete = useCallback(() => {
+    if (trainingStartTime) {
+      addSession({
+        type: 'co2-table',
+        startTime: trainingStartTime,
+        endTime: new Date(),
+        completed: true,
+        meta: {
+          holdTimeSeconds,
+          breathTimeSeconds: CO2_TABLE_BREATHE_TIMES[0],
+          cycles: CO2_TABLE_ROUNDS,
+        },
+      });
+    }
     setIsTrainingComplete(true);
-    // TODO: Save to training history
-  }, []);
+  }, [addSession, holdTimeSeconds, trainingStartTime]);
 
   const handleCancel = useCallback(() => {
     setShowCancelDialog(false);
@@ -100,6 +116,11 @@ export default function CO2TableScreen() {
   const handleCompletedOk = useCallback(() => {
     setIsTrainingComplete(false);
   }, []);
+
+  const handleStart = useCallback(() => {
+    setTrainingStartTime(new Date());
+    start();
+  }, [start]);
 
   const totalTime = calculateTotalTime(CO2_TABLE_BREATHE_TIMES, holdTimeSeconds);
 
@@ -187,7 +208,7 @@ export default function CO2TableScreen() {
           {/* Training Controls */}
           <View className="gap-3 mb-6">
             {!isRunning && (
-              <Button size="lg" onPress={start} variant="default">
+              <Button size="lg" onPress={handleStart} variant="default">
                 <Text className="text-white">{t('co2Table.controls.start')}</Text>
               </Button>
             )}

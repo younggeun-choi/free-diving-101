@@ -13,7 +13,9 @@ import type { TrainingSession } from '@/entities/training-record';
  */
 function getSessionTitle(session: TrainingSession, t: (key: string, options?: Record<string, unknown>) => string): string {
   if (session.type === 'frenzel') {
-    const { dayNumber, dayTitle } = session.meta;
+    const { dayNumber } = session.meta;
+    // dayNumber로부터 i18n 키를 재구성하여 번역
+    const dayTitle = t(`equalizing.day${dayNumber}.title`);
     return t('history.frenzelTitle', { dayNumber, dayTitle });
   } else {
     const { holdTimeSeconds } = session.meta;

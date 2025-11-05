@@ -10,7 +10,7 @@ export const TrainingTypeSchema = z.enum(['frenzel', 'co2-table']);
  */
 export const FrenzelSessionMetaSchema = z.object({
   dayNumber: z.number().int().min(1).max(10),
-  dayTitle: z.string(), // i18n 키 또는 번역된 제목
+  // dayTitle은 dayNumber로부터 재구성 가능하므로 저장하지 않음
 });
 
 /**

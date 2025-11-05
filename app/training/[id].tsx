@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import {
   DayDetailCard,
   TrainingTimer,
-  useTrainingHistory,
   useTimer,
 } from '@/features/frenzel-trainer';
+import { useTrainingHistory } from '@/stores';
 import {
   requestNotificationPermissions,
   scheduleTrainingNotification,
@@ -27,11 +27,22 @@ export default function TrainingScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
-  const { completeSession, isDayCompleted, startSession } = useTrainingHistory();
+  const { addSession, updateSession, getFrenzelSessions } = useTrainingHistory();
 
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [notificationId, setNotificationId] = useState<string | null>(null);
   const [day, setDay] = useState<FrenzelDay | null>(null);
+
+  // Helper function to check if a day is completed
+  const isDayCompleted = (dayNumber: number): boolean => {
+    const frenzelSessions = getFrenzelSessions();
+    return frenzelSessions.some(
+      (session) =>
+        session.type === 'frenzel' &&
+        session.meta.dayNumber === dayNumber &&
+        session.completed
+    );
+  };
 
   // Find the training day
   useEffect(() => {
@@ -55,7 +66,10 @@ export default function TrainingScreen() {
     }
 
     // Complete the session
-    completeSession(currentSessionId, '');
+    updateSession(currentSessionId, {
+      endTime: new Date(),
+      completed: true,
+    });
 
     // Send immediate notification
     await sendTrainingCompleteNotification(day.dayNumber);
@@ -91,7 +105,15 @@ export default function TrainingScreen() {
   const handleTimerStart = async () => {
     if (!day) return;
 
-    const sessionId = startSession(day.dayNumber);
+    const sessionId = addSession({
+      type: 'frenzel',
+      startTime: new Date(),
+      endTime: new Date(), // Will be updated on completion
+      completed: false,
+      meta: {
+        dayNumber: day.dayNumber,
+      },
+    });
     setCurrentSessionId(sessionId);
 
     // Schedule completion notification

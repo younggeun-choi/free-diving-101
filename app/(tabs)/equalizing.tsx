@@ -1,7 +1,8 @@
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { EducationAccordion, DayList, useTrainingHistory } from '@/features/frenzel-trainer';
+import { EducationAccordion, DayList } from '@/features/frenzel-trainer';
+import { useTrainingHistory } from '@/stores';
 
 /**
  * Equalizing Training Screen
@@ -13,8 +14,20 @@ import { EducationAccordion, DayList, useTrainingHistory } from '@/features/fren
  */
 export default function EqualizingScreen() {
   const router = useRouter();
-  const { completedDays } = useTrainingHistory();
+  const { getFrenzelSessions } = useTrainingHistory();
   const insets = useSafeAreaInsets();
+
+  // Compute completed days from unified store
+  const completedDays = getFrenzelSessions()
+    .filter((session) => session.completed)
+    .map((session) => {
+      // Type guard: getFrenzelSessions returns only type='frenzel'
+      if (session.type === 'frenzel') {
+        return session.meta.dayNumber;
+      }
+      return -1; // Should never happen, but TypeScript needs this
+    })
+    .filter((dayNumber) => dayNumber !== -1);
 
   const handleDayPress = (day: { dayNumber: number }) => {
     router.push(`/training/${day.dayNumber}`);
