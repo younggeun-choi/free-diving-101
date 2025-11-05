@@ -222,7 +222,7 @@
     "dayTitle": "Day {{day}}"
   },
   "history": {
-    "title": "History",
+    "title": "Training History",
     "statistics": "Training Statistics",
     "completedDays": "Completed Days",
     "totalSessions": "Total Sessions",
@@ -231,12 +231,22 @@
     "sessionHistory": "Session History",
     "clearAll": "Clear All",
     "noSessions": "No completed training sessions yet.",
+    "empty": "No completed training sessions yet.",
+    "emptySubtitle": "Start your first training!",
     "date": "Date",
     "time": "Time",
+    "completedAt": "Completed At",
+    "duration": "Duration",
     "notes": "Notes",
     "completed": "Completed: {{duration}} min",
-    "empty": "No completed training sessions yet.",
-    "completedAt": "Completed At"
+    "frenzelBadge": "Frenzel",
+    "co2Badge": "CO₂",
+    "frenzelTitle": "Day {{dayNumber}}: {{dayTitle}}",
+    "co2TableTitle": "CO₂ Table: {{holdTime}} Hold",
+    "durationMinutes": "{{mins}}min",
+    "durationSeconds": "{{secs}}sec",
+    "durationMinutesSeconds": "{{mins}}min {{secs}}sec",
+    "unknownDuration": "Unknown"
   },
   "notFound": {
     "title": "Page Not Found",

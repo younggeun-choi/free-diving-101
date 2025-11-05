@@ -68,7 +68,7 @@ function getTTSTextForTime(
   remainingSeconds: number,
   isBreathing: boolean,
   isPhaseStart: boolean,
-  language: SupportedLanguage
+  _language: SupportedLanguage
 ): string | null {
   // Breathe/Hold 시작 시점
   if (isPhaseStart) {
