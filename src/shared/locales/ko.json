@@ -8,7 +8,7 @@
     "home": "홈",
     "equalizing": "이퀄라이징",
     "co2Table": "CO₂ 테이블",
-    "history": "히스토리"
+    "history": "훈련 기록"
   },
   "home": {
     "title": "홈"
@@ -223,6 +223,8 @@
   },
   "history": {
     "title": "훈련 기록",
+    "today": "오늘",
+    "yesterday": "어제",
     "statistics": "훈련 통계",
     "completedDays": "완료한 일수",
     "totalSessions": "총 세션",

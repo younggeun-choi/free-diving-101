@@ -223,6 +223,8 @@
   },
   "history": {
     "title": "Training History",
+    "today": "Today",
+    "yesterday": "Yesterday",
     "statistics": "Training Statistics",
     "completedDays": "Completed Days",
     "totalSessions": "Total Sessions",

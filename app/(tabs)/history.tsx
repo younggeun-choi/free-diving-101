@@ -1,4 +1,4 @@
-import { View, ScrollView, FlatList } from 'react-native';
+import { View, SectionList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useTrainingHistory } from '@/stores';
@@ -31,6 +31,64 @@ function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+/**
+ * 훈련 세션을 날짜별로 그룹핑
+ */
+function groupSessionsByDate(sessions: TrainingSession[]): {
+  date: string;
+  data: TrainingSession[];
+}[] {
+  const grouped = new Map<string, TrainingSession[]>();
+
+  sessions.forEach((session) => {
+    const dateKey = session.endTime.toISOString().split('T')[0]; // YYYY-MM-DD
+    if (!grouped.has(dateKey)) {
+      grouped.set(dateKey, []);
+    }
+    grouped.get(dateKey)!.push(session);
+  });
+
+  // 날짜 최신순으로 정렬
+  return Array.from(grouped.entries())
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([date, data]) => ({ date, data }));
+}
+
+/**
+ * 날짜를 사용자 친화적 형식으로 표시
+ * 오늘, 어제, 또는 로케일에 맞는 날짜 형식
+ */
+function formatSectionDate(
+  dateString: string,
+  t: (key: string, options?: Record<string, unknown>) => string
+): string {
+  const date = new Date(dateString);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // 날짜만 비교 (시간 제외)
+  const isSameDay = (d1: Date, d2: Date) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  if (isSameDay(date, today)) {
+    return t('history.today');
+  }
+
+  if (isSameDay(date, yesterday)) {
+    return t('history.yesterday');
+  }
+
+  // 일반 날짜 (로케일에 맞게 표시)
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 }
 
 /**
@@ -72,7 +130,7 @@ function TrainingRecordCard({ session }: { session: TrainingSession }) {
   const typeBadgeVariant = session.type === 'frenzel' ? 'default' : 'secondary';
 
   return (
-    <Card className="mb-3">
+    <Card className="mx-4">
       <CardHeader>
         <Badge variant={typeBadgeVariant}>
           <Text variant="small">{typeLabel}</Text>
@@ -124,42 +182,44 @@ export default function HistoryScreen() {
   const { sessions } = useTrainingHistory();
   const insets = useSafeAreaInsets();
 
-  // 최신순 정렬
+  // 최신순 정렬 후 날짜별 그룹핑
   const sortedSessions = [...sessions].sort(
     (a, b) => b.endTime.getTime() - a.endTime.getTime()
   );
+  const sectionedData = groupSessionsByDate(sortedSessions);
 
   return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
-    >
-      <View className="p-4">
-        <Text variant="h2" className="mb-4">
-          {t('history.title')}
-        </Text>
-
-        {/* Session History */}
-        {sortedSessions.length > 0 ? (
-          <FlatList
-            data={sortedSessions}
-            renderItem={({ item }) => <TrainingRecordCard session={item} />}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={false}
-          />
-        ) : (
-          <Card>
-            <CardContent className="py-8">
-              <Text variant="p" className="text-center text-muted-foreground mb-2">
-                {t('history.empty')}
-              </Text>
-              <Text variant="small" className="text-center text-muted-foreground">
-                {t('history.emptySubtitle')}
-              </Text>
-            </CardContent>
-          </Card>
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
+      <SectionList
+        sections={sectionedData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <TrainingRecordCard session={item} />}
+        renderSectionHeader={({ section: { date } }) => (
+          <View className="bg-background py-3 px-4 items-center">
+            <Text variant="large" className="font-semibold text-muted-foreground uppercase">
+              {formatSectionDate(date, t)}
+            </Text>
+          </View>
         )}
-      </View>
-    </ScrollView>
+        contentContainerStyle={{ paddingBottom: insets.bottom }}
+        stickySectionHeadersEnabled={true}
+        ListEmptyComponent={
+          <View className="p-4">
+            <Card>
+              <CardContent className="py-8">
+                <Text variant="p" className="text-center text-muted-foreground mb-2">
+                  {t('history.empty')}
+                </Text>
+                <Text variant="small" className="text-center text-muted-foreground">
+                  {t('history.emptySubtitle')}
+                </Text>
+              </CardContent>
+            </Card>
+          </View>
+        }
+        ItemSeparatorComponent={() => <View className="h-3" />}
+        SectionSeparatorComponent={() => <View className="h-1" />}
+      />
+    </View>
   );
 }
