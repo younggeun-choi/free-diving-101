@@ -43,8 +43,9 @@ const useTrainingHistoryStore = create<TrainingHistoryState>()(
           id: randomUUID(),
         });
 
+        // 최신 세션을 앞에 추가 (reverse chronological order)
         set((state) => ({
-          sessions: [...state.sessions, validated],
+          sessions: [validated, ...state.sessions],
         }));
 
         return validated.id;
@@ -64,11 +65,15 @@ const useTrainingHistoryStore = create<TrainingHistoryState>()(
       },
 
       getFrenzelSessions: () => {
-        return get().sessions.filter((s) => s.type === 'frenzel');
+        return get()
+          .sessions.filter((s) => s.type === 'frenzel')
+          .sort((a, b) => b.endTime.getTime() - a.endTime.getTime());
       },
 
       getCO2Sessions: () => {
-        return get().sessions.filter((s) => s.type === 'co2-table');
+        return get()
+          .sessions.filter((s) => s.type === 'co2-table')
+          .sort((a, b) => b.endTime.getTime() - a.endTime.getTime());
       },
 
       clearHistory: () => {
