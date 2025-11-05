@@ -101,6 +101,8 @@ eas submit --platform ios
 - [PRD01: Skeleton App](./docs/requirements/PRD01-skeleton-app.md)
 - [PRD02: Frenzel Training](./docs/requirements/PRD02-frenzel-training.md)
 - [PRD03: CO₂ Table Training](./docs/requirements/PRD03-co2-table-training.md)
+- [PRD04: Unified Training History](./docs/requirements/PRD04-unified-training-history.md)
+- [PRD05: Home Dashboard & Progress](./docs/requirements/PRD05-home-dashboard.md)
 - [What is Frenzel?](./docs/requirements/what-is-frenzel.md)
 
 ### 개발 가이드 (Development Guides)

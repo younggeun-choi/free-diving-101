@@ -28,6 +28,13 @@
 - AsyncStorage 데이터 영속성
 - 향후 대시보드 확장 기반
 
+### [PRD05: Home Dashboard & Progress](./PRD05-home-dashboard.md)
+- 홈 화면 대시보드 및 진행도 추적
+- Quick Actions (Continue/Start 훈련)
+- Progress Overview (프렌젤 진행도, Streak)
+- Recent Activity Preview
+- Empty State (신규 사용자 온보딩)
+
 ### [What is Frenzel?](./what-is-frenzel.md)
 - 프렌젤 이퀄라이징 기법 설명
 - 생리학적 원리
