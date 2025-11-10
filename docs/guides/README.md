@@ -89,6 +89,27 @@ Claude Code의 Codex 활용 워크플로우
 
 ---
 
+### [Testing](./TESTING.md)
+테스트 작성 가이드
+
+- 테스트가 필요한 이유
+- 프로젝트 테스트 구조
+- Jest 설정
+- 테스트 환경 설정
+- 실전 테스트 패턴 (Entity/Hook/Store/Complex Hook)
+- Mock 이해하기
+- 테스트 실행 방법
+- 처음 테스트 작성하기
+- 자주 하는 실수와 해결책
+
+**언제 읽어야 하나요?**
+- 처음 테스트를 작성하기 전
+- 테스트 환경 설정이 궁금할 때
+- Hook이나 Store 테스트 방법을 알고 싶을 때
+- 테스트 실행 중 에러가 발생했을 때
+
+---
+
 ## 빠른 참조
 
 ### 새 기능 추가 체크리스트
@@ -98,8 +119,8 @@ Claude Code의 Codex 활용 워크플로우
 3. [ ] [의존성 관리](./DEPENDENCIES.md) - 필요한 패키지 설치
 4. [ ] [코딩 표준](./CODING_STANDARDS.md) - 코드 작성 규칙 준수
 5. [ ] [i18n 추가](./I18N.md) - 번역 텍스트 추가
-6. [ ] [Codex 리뷰](./CODEX_WORKFLOW.md) - 코드 품질 검증
-7. [ ] 테스트 작성
+6. [ ] [테스트 작성](./TESTING.md) - 단위 테스트 및 통합 테스트
+7. [ ] [Codex 리뷰](./CODEX_WORKFLOW.md) - 코드 품질 검증
 8. [ ] 문서 업데이트
 
 ### 일반적인 작업
@@ -111,6 +132,7 @@ Claude Code의 Codex 활용 워크플로우
 | 스타일링 | [Coding Standards](./CODING_STANDARDS.md#nativewind-스타일링) |
 | 번역 추가 | [I18N](./I18N.md#새-번역-추가) |
 | 패키지 설치 | [Dependencies](./DEPENDENCIES.md#claude-code-패키지-설치-워크플로우) |
+| 테스트 작성 | [Testing](./TESTING.md#8-처음-테스트-작성하기) |
 | 성능 최적화 | [Coding Standards](./CODING_STANDARDS.md#react-compiler) |
 
 ---

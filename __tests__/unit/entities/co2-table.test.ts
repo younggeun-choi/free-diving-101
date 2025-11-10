@@ -166,6 +166,30 @@ describe('CO2TableConfigSchema', () => {
 
     expect(() => CO2TableConfigSchema.parse(config)).toThrow();
   });
+
+  it('문자열 입력은 에러', () => {
+    const config = {
+      holdTimeSeconds: '90', // ❌ 문자열
+    };
+
+    expect(() => CO2TableConfigSchema.parse(config as any)).toThrow();
+  });
+
+  it('undefined 입력은 에러', () => {
+    const config = {
+      holdTimeSeconds: undefined, // ❌ 설정되지 않음
+    };
+
+    expect(() => CO2TableConfigSchema.parse(config as any)).toThrow();
+  });
+
+  it('소수점 입력은 에러', () => {
+    const config = {
+      holdTimeSeconds: 90.5, // ❌ 정수 아님
+    };
+
+    expect(() => CO2TableConfigSchema.parse(config)).toThrow();
+  });
 });
 
 describe('총 훈련 시간 계산', () => {

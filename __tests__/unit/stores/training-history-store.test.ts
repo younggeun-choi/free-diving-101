@@ -1,6 +1,6 @@
-import { renderHook, act } from '@testing-library/react-native';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTrainingHistory } from '@/stores/training-history-store';
+import { useTrainingHistory, useTrainingHistoryStore } from '@/stores/training-history-store';
 import type { TrainingSession } from '@/entities/training-record';
 
 // Mock data
@@ -393,7 +393,7 @@ describe('useTrainingHistory', () => {
       expect(session.endTime).toBeInstanceOf(Date);
     });
 
-    it('ISO 문자열이 Date 객체로 역직렬화', () => {
+    it('ISO 문자열이 Date 객체로 역직렬화', async () => {
       // AsyncStorage에서 복원된 데이터 시뮬레이션
       const storedData = {
         state: {
@@ -411,18 +411,20 @@ describe('useTrainingHistory', () => {
         version: 0,
       };
 
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(
-        JSON.stringify(storedData)
-      );
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(storedData));
+
+      await act(async () => {
+        await useTrainingHistoryStore.persist.rehydrate();
+      });
 
       const { result } = renderHook(() => useTrainingHistory());
 
-      // 스토어가 초기화되면서 AsyncStorage에서 데이터를 불러옴
-      // 날짜가 Date 객체로 복원되어야 함
-      if (result.current.sessions.length > 0) {
-        expect(result.current.sessions[0].startTime).toBeInstanceOf(Date);
-        expect(result.current.sessions[0].endTime).toBeInstanceOf(Date);
-      }
+      await waitFor(() => {
+        expect(result.current.sessions.length).toBeGreaterThan(0);
+      });
+
+      expect(result.current.sessions[0].startTime).toBeInstanceOf(Date);
+      expect(result.current.sessions[0].endTime).toBeInstanceOf(Date);
     });
   });
 

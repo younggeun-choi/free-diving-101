@@ -103,6 +103,23 @@ describe('TrainingSessionSchema', () => {
       const result = TrainingSessionSchema.parse(validData);
       expect(result.notes).toBeUndefined();
     });
+
+    it('ISO 문자열 startTime/endTime을 Date로 변환', () => {
+      const validData = {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        type: 'frenzel' as const,
+        startTime: '2025-01-01T10:00:00Z',
+        endTime: '2025-01-01T10:10:00Z',
+        completed: true,
+        meta: {
+          dayNumber: 1,
+        },
+      };
+
+      const result = TrainingSessionSchema.parse(validData);
+      expect(result.startTime).toBeInstanceOf(Date);
+      expect(result.endTime).toBeInstanceOf(Date);
+    });
   });
 
   describe('CO₂ 세션 검증', () => {
@@ -177,6 +194,25 @@ describe('TrainingSessionSchema', () => {
       };
 
       expect(() => TrainingSessionSchema.parse(invalidData)).toThrow();
+    });
+
+    it('ISO 문자열 startTime/endTime을 Date로 변환 (CO₂)', () => {
+      const validData = {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        type: 'co2-table' as const,
+        startTime: '2025-01-01T10:00:00Z',
+        endTime: '2025-01-01T10:30:00Z',
+        completed: true,
+        meta: {
+          holdTimeSeconds: 90,
+          breathTimeSeconds: 120,
+          cycles: 8,
+        },
+      };
+
+      const result = TrainingSessionSchema.parse(validData);
+      expect(result.startTime).toBeInstanceOf(Date);
+      expect(result.endTime).toBeInstanceOf(Date);
     });
   });
 
@@ -357,6 +393,14 @@ describe('FrenzelSessionMetaSchema', () => {
     expect(() => FrenzelSessionMetaSchema.parse({ dayNumber: 1 })).not.toThrow();
     expect(() => FrenzelSessionMetaSchema.parse({ dayNumber: 10 })).not.toThrow();
   });
+
+  it('dayNumber가 0이면 에러', () => {
+    expect(() => FrenzelSessionMetaSchema.parse({ dayNumber: 0 })).toThrow();
+  });
+
+  it('dayNumber가 11이면 에러', () => {
+    expect(() => FrenzelSessionMetaSchema.parse({ dayNumber: 11 })).toThrow();
+  });
 });
 
 describe('CO2TableSessionMetaSchema', () => {
@@ -378,6 +422,42 @@ describe('CO2TableSessionMetaSchema', () => {
         holdTimeSeconds: 0, // ❌
         breathTimeSeconds: 120,
         cycles: 8,
+      })
+    ).toThrow();
+  });
+
+  it('breathTimeSeconds가 0이거나 음수면 에러', () => {
+    expect(() =>
+      CO2TableSessionMetaSchema.parse({
+        holdTimeSeconds: 90,
+        breathTimeSeconds: 0,
+        cycles: 8,
+      })
+    ).toThrow();
+
+    expect(() =>
+      CO2TableSessionMetaSchema.parse({
+        holdTimeSeconds: 90,
+        breathTimeSeconds: -30,
+        cycles: 8,
+      })
+    ).toThrow();
+  });
+
+  it('cycles가 0이거나 음수면 에러', () => {
+    expect(() =>
+      CO2TableSessionMetaSchema.parse({
+        holdTimeSeconds: 90,
+        breathTimeSeconds: 120,
+        cycles: 0,
+      })
+    ).toThrow();
+
+    expect(() =>
+      CO2TableSessionMetaSchema.parse({
+        holdTimeSeconds: 90,
+        breathTimeSeconds: 120,
+        cycles: -1,
       })
     ).toThrow();
   });

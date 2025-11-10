@@ -6,6 +6,7 @@ import * as TTS from '@/features/co2-table-trainer/lib/tts';
 
 // Mock AppState
 let mockAppStateListener: ((state: AppStateStatus) => void) | null = null;
+let mockAppStateSubscription: { remove: jest.Mock } | null = null;
 jest.mock('react-native', () => ({
   AppState: {
     currentState: 'active',
@@ -13,9 +14,10 @@ jest.mock('react-native', () => ({
       if (event === 'change') {
         mockAppStateListener = callback;
       }
-      return {
+      mockAppStateSubscription = {
         remove: jest.fn(),
       };
+      return mockAppStateSubscription;
     }),
     removeEventListener: jest.fn(),
   },
@@ -43,10 +45,13 @@ describe('useCO2TableTimer', () => {
     mockOnComplete = jest.fn();
     mockOnCancel = jest.fn();
     mockAppStateListener = null;
+    mockAppStateSubscription = null;
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
     jest.useRealTimers();
   });
 
@@ -621,6 +626,9 @@ describe('useCO2TableTimer', () => {
       expect(() => {
         jest.advanceTimersByTime(5000);
       }).not.toThrow();
+
+      expect(mockAppStateSubscription).not.toBeNull();
+      expect(mockAppStateSubscription!.remove).toHaveBeenCalled();
     });
   });
 

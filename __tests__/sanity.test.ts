@@ -18,13 +18,15 @@ describe('Jest Setup Sanity Check', () => {
     jest.useFakeTimers();
     const callback = jest.fn();
 
-    setTimeout(callback, 1000);
-    expect(callback).not.toHaveBeenCalled();
+    try {
+      setTimeout(callback, 1000);
+      expect(callback).not.toHaveBeenCalled();
 
-    jest.advanceTimersByTime(1000);
-    expect(callback).toHaveBeenCalled();
-
-    jest.useRealTimers();
+      jest.advanceTimersByTime(1000);
+      expect(callback).toHaveBeenCalled();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('AsyncStorage mock이 사용 가능함', async () => {

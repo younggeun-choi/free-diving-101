@@ -31,7 +31,7 @@ interface TrainingHistoryState {
   clearHistory: () => void;
 }
 
-const useTrainingHistoryStore = create<TrainingHistoryState>()(
+export const useTrainingHistoryStore = create<TrainingHistoryState>()(
   persist(
     (set, get) => ({
       sessions: [],

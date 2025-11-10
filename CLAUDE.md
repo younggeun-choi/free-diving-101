@@ -114,6 +114,7 @@ eas submit --platform ios
 - [의존성 관리](./docs/guides/DEPENDENCIES.md) - Expo SDK 패키지 설치 및 관리
 - [코딩 표준](./docs/guides/CODING_STANDARDS.md) - TypeScript, Zod, React Compiler
 - [다국어 지원](./docs/guides/I18N.md) - i18next 사용법
+- [테스팅](./docs/guides/TESTING.md) - Jest, 테스트 패턴, Mock 전략
 - [Codex 워크플로우](./docs/guides/CODEX_WORKFLOW.md) - Codex 활용 가이드
 
 ---
@@ -160,7 +161,8 @@ free-diving-101/
 3. **코딩 표준 준수**: [코딩 표준](./docs/guides/CODING_STANDARDS.md) 준수
 4. **패키지 설치**: [의존성 관리](./docs/guides/DEPENDENCIES.md) 가이드 따르기
 5. **번역 추가**: [i18n 가이드](./docs/guides/I18N.md) 참조
-6. **코드 리뷰**: [Codex 워크플로우](./docs/guides/CODEX_WORKFLOW.md) 활용
+6. **테스트 작성**: [테스팅 가이드](./docs/guides/TESTING.md) 참조
+7. **코드 리뷰**: [Codex 워크플로우](./docs/guides/CODEX_WORKFLOW.md) 활용
 
 ---
 

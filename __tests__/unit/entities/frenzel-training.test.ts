@@ -97,17 +97,17 @@ describe('FRENZEL_TRAINING_SCHEDULE', () => {
 });
 
 describe('FrenzelDaySchema', () => {
-  it('유효한 FrenzelDay 객체를 파싱', () => {
-    const validDay = {
-      dayNumber: 1,
-      title: 'equalizing.day1.title',
-      goal: 'equalizing.day1.goal',
-      durationMinutes: 10,
-      steps: ['equalizing.day1.step1', 'equalizing.day1.step2'],
-      successCriteria: 'equalizing.day1.success',
-    };
+  const baseValidDay = {
+    dayNumber: 1,
+    title: 'equalizing.day1.title',
+    goal: 'equalizing.day1.goal',
+    durationMinutes: 10,
+    steps: ['equalizing.day1.step1', 'equalizing.day1.step2'],
+    successCriteria: 'equalizing.day1.success',
+  };
 
-    const result = FrenzelDaySchema.parse(validDay);
+  it('유효한 FrenzelDay 객체를 파싱', () => {
+    const result = FrenzelDaySchema.parse(baseValidDay);
     expect(result.dayNumber).toBe(1);
     expect(result.durationMinutes).toBe(10);
   });
@@ -162,5 +162,61 @@ describe('FrenzelDaySchema', () => {
     };
 
     expect(() => FrenzelDaySchema.parse(invalidDay)).toThrow();
+  });
+
+  it('title이 빈 문자열이거나 문자열이 아니면 에러', () => {
+    const emptyTitleDay = {
+      ...baseValidDay,
+      title: '',
+    };
+    const nonStringTitleDay = {
+      ...baseValidDay,
+      title: 123 as any,
+    };
+
+    expect(() => FrenzelDaySchema.parse(emptyTitleDay)).toThrow();
+    expect(() => FrenzelDaySchema.parse(nonStringTitleDay)).toThrow();
+  });
+
+  it('goal이 빈 문자열이거나 문자열이 아니면 에러', () => {
+    const emptyGoalDay = {
+      ...baseValidDay,
+      goal: '',
+    };
+    const nonStringGoalDay = {
+      ...baseValidDay,
+      goal: { text: 'equalizing.day1.goal' } as any,
+    };
+
+    expect(() => FrenzelDaySchema.parse(emptyGoalDay)).toThrow();
+    expect(() => FrenzelDaySchema.parse(nonStringGoalDay)).toThrow();
+  });
+
+  it('successCriteria가 빈 문자열이거나 문자열이 아니면 에러', () => {
+    const emptyCriteriaDay = {
+      ...baseValidDay,
+      successCriteria: '',
+    };
+    const nonStringCriteriaDay = {
+      ...baseValidDay,
+      successCriteria: ['equalizing.day1.success'] as any,
+    };
+
+    expect(() => FrenzelDaySchema.parse(emptyCriteriaDay)).toThrow();
+    expect(() => FrenzelDaySchema.parse(nonStringCriteriaDay)).toThrow();
+  });
+
+  it('steps에 빈 문자열이나 문자열이 아닌 값이 있으면 에러', () => {
+    const emptyStepDay = {
+      ...baseValidDay,
+      steps: ['equalizing.day1.step1', ''],
+    };
+    const nonStringStepDay = {
+      ...baseValidDay,
+      steps: ['equalizing.day1.step1', 123 as any],
+    };
+
+    expect(() => FrenzelDaySchema.parse(emptyStepDay)).toThrow();
+    expect(() => FrenzelDaySchema.parse(nonStringStepDay)).toThrow();
   });
 });
