@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import { CO2_TABLE_BREATHE_TIMES, CO2_TABLE_ROUNDS } from '@/entities/co2-table';
 import { speakForTimer, stopSpeech, speakTrainingComplete } from './tts';
 import { getCurrentLanguage } from '@/shared/lib/i18n';
@@ -24,16 +25,19 @@ interface UseCO2TableTimerReturn {
   cancel: () => void;
 }
 
-export function useCO2TableTimer(
-  options: UseCO2TableTimerOptions
-): UseCO2TableTimerReturn {
+const TICK_INTERVAL_MS = 1000;
+
+const isBackgroundState = (state: AppStateStatus) =>
+  state === 'background' || state === 'inactive';
+
+const msToSeconds = (ms: number) => Math.max(0, Math.ceil(ms / 1000));
+
+export function useCO2TableTimer(options: UseCO2TableTimerOptions): UseCO2TableTimerReturn {
   const { holdTimeSeconds, onComplete, onCancel } = options;
 
   const [currentRound, setCurrentRound] = useState(1);
   const [isBreathing, setIsBreathing] = useState(true);
-  const [remainingSeconds, setRemainingSeconds] = useState(
-    CO2_TABLE_BREATHE_TIMES[0]
-  );
+  const [remainingSeconds, setRemainingSeconds] = useState(CO2_TABLE_BREATHE_TIMES[0]);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [breatheProgress, setBreatheProgress] = useState(100);
@@ -41,8 +45,36 @@ export function useCO2TableTimer(
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isPhaseStartRef = useRef(false);
+  const phaseEndsAtRef = useRef<number | null>(null);
+  const pausedRemainingMsRef = useRef<number | null>(null);
+  const currentRoundRef = useRef(1);
+  const isBreathingRef = useRef(true);
+  const isRunningRef = useRef(false);
+  const appStateRef = useRef<AppStateStatus>(AppState.currentState ?? 'active');
+  const tickRef = useRef<() => void>(() => {});
+  const reconcilePhaseAfterResumeRef = useRef<() => void>(() => {});
 
-  // 현재 단계의 총 시간 계산
+  const setRoundState = (round: number) => {
+    currentRoundRef.current = round;
+    setCurrentRound(round);
+  };
+
+  const setBreathingState = (breathing: boolean) => {
+    isBreathingRef.current = breathing;
+    setIsBreathing(breathing);
+  };
+
+  const resetTimerVisuals = () => {
+    setRoundState(1);
+    setBreathingState(true);
+    setRemainingSeconds(CO2_TABLE_BREATHE_TIMES[0]);
+    setBreatheProgress(100);
+    setHoldProgress(100);
+    phaseEndsAtRef.current = null;
+    pausedRemainingMsRef.current = null;
+    isPhaseStartRef.current = false;
+  };
+
   const getTotalSecondsForPhase = (round: number, breathing: boolean): number => {
     if (breathing) {
       return CO2_TABLE_BREATHE_TIMES[round - 1];
@@ -50,10 +82,13 @@ export function useCO2TableTimer(
     return holdTimeSeconds;
   };
 
-  // Progress 업데이트
-  const updateProgress = (round: number, breathing: boolean, remaining: number) => {
+  const updateProgress = (
+    round: number,
+    breathing: boolean,
+    remainingSecondsForPhase: number
+  ) => {
     const total = getTotalSecondsForPhase(round, breathing);
-    const progress = (remaining / total) * 100;
+    const progress = (remainingSecondsForPhase / total) * 100;
 
     if (breathing) {
       setBreatheProgress(Math.max(0, Math.min(100, progress)));
@@ -64,7 +99,126 @@ export function useCO2TableTimer(
     }
   };
 
-  // 타이머 로직
+  const finishTraining = () => {
+    if (!isRunningRef.current) {
+      return;
+    }
+
+    isRunningRef.current = false;
+    setIsRunning(false);
+    setIsPaused(false);
+    phaseEndsAtRef.current = null;
+    pausedRemainingMsRef.current = null;
+    isPhaseStartRef.current = false;
+    stopSpeech();
+    const currentLanguage = getCurrentLanguage();
+    speakTrainingComplete(currentLanguage);
+    onComplete();
+  };
+
+  const startPhase = (round: number, breathing: boolean, skippedMs = 0) => {
+    const totalSeconds = getTotalSecondsForPhase(round, breathing);
+    const totalMs = totalSeconds * 1000;
+    const remainingMs = totalMs - skippedMs;
+
+    // Check if phase should be skipped before updating state
+    if (remainingMs <= 0) {
+      completePhase(Math.abs(remainingMs));
+      return;
+    }
+
+    // Only update state if phase will actually run
+    setRoundState(round);
+    setBreathingState(breathing);
+
+    const nextRemainingSeconds = msToSeconds(remainingMs);
+    phaseEndsAtRef.current = Date.now() + remainingMs;
+    pausedRemainingMsRef.current = null;
+    setRemainingSeconds(nextRemainingSeconds);
+    updateProgress(round, breathing, nextRemainingSeconds);
+    isPhaseStartRef.current = true;
+  };
+
+  const completePhase = (carryMs = 0) => {
+    if (!isRunningRef.current) {
+      return;
+    }
+
+    if (isBreathingRef.current) {
+      startPhase(currentRoundRef.current, false, carryMs);
+      return;
+    }
+
+    if (currentRoundRef.current < CO2_TABLE_ROUNDS) {
+      const nextRound = currentRoundRef.current + 1;
+      startPhase(nextRound, true, carryMs);
+      return;
+    }
+
+    finishTraining();
+  };
+
+  const reconcilePhaseAfterResume = () => {
+    if (!isRunningRef.current || isPaused || !phaseEndsAtRef.current) {
+      return;
+    }
+
+    const now = Date.now();
+    const remainingMs = phaseEndsAtRef.current - now;
+
+    if (remainingMs <= 0) {
+      completePhase(Math.abs(remainingMs));
+      tickRef.current();
+      return;
+    }
+
+    const nextRemainingSeconds = msToSeconds(remainingMs);
+    setRemainingSeconds(nextRemainingSeconds);
+    updateProgress(currentRoundRef.current, isBreathingRef.current, nextRemainingSeconds);
+    isPhaseStartRef.current = false;
+    stopSpeech();
+    const currentLanguage = getCurrentLanguage();
+    speakForTimer(nextRemainingSeconds, isBreathingRef.current, true, currentLanguage);
+  };
+
+  const tick = () => {
+    if (!isRunningRef.current || !phaseEndsAtRef.current) {
+      return;
+    }
+
+    if (isPhaseStartRef.current) {
+      const remainingMsForStart = phaseEndsAtRef.current - Date.now();
+      const remainingSecondsForStart = msToSeconds(remainingMsForStart);
+      const currentLanguage = getCurrentLanguage();
+      speakForTimer(remainingSecondsForStart, isBreathingRef.current, true, currentLanguage);
+      isPhaseStartRef.current = false;
+    }
+
+    const now = Date.now();
+    const remainingMs = phaseEndsAtRef.current - now;
+
+    if (remainingMs <= 0) {
+      completePhase(Math.abs(remainingMs));
+      return;
+    }
+
+    const nextRemainingSeconds = msToSeconds(remainingMs);
+
+    setRemainingSeconds((prev) => {
+      if (prev === nextRemainingSeconds) {
+        return prev;
+      }
+
+      updateProgress(currentRoundRef.current, isBreathingRef.current, nextRemainingSeconds);
+      const currentLanguage = getCurrentLanguage();
+      speakForTimer(nextRemainingSeconds, isBreathingRef.current, false, currentLanguage);
+      return nextRemainingSeconds;
+    });
+  };
+
+  tickRef.current = tick;
+  reconcilePhaseAfterResumeRef.current = reconcilePhaseAfterResume;
+
   useEffect(() => {
     if (!isRunning || isPaused) {
       if (intervalRef.current) {
@@ -74,57 +228,9 @@ export function useCO2TableTimer(
       return;
     }
 
-    // TTS 발화 (단계 시작 시)
-    if (isPhaseStartRef.current) {
-      const currentLanguage = getCurrentLanguage();
-      speakForTimer(remainingSeconds, isBreathing, true, currentLanguage);
-      isPhaseStartRef.current = false;
-    }
-
-    intervalRef.current = setInterval(() => {
-      setRemainingSeconds((prev) => {
-        const newRemaining = prev - 1;
-
-        // TTS 발화 (시간 마커)
-        const currentLanguage = getCurrentLanguage();
-        speakForTimer(newRemaining, isBreathing, false, currentLanguage);
-
-        // 단계 종료 처리
-        if (newRemaining <= 0) {
-          if (isBreathing) {
-            // Breathe -> Hold 전이
-            setIsBreathing(false);
-            setRemainingSeconds(holdTimeSeconds);
-            updateProgress(currentRound, false, holdTimeSeconds);
-            isPhaseStartRef.current = true;
-          } else {
-            // Hold 종료
-            if (currentRound < CO2_TABLE_ROUNDS) {
-              // 다음 Round로 전이
-              const nextRound = currentRound + 1;
-              setCurrentRound(nextRound);
-              setIsBreathing(true);
-              const nextBreatheTime = CO2_TABLE_BREATHE_TIMES[nextRound - 1];
-              setRemainingSeconds(nextBreatheTime);
-              updateProgress(nextRound, true, nextBreatheTime);
-              isPhaseStartRef.current = true;
-            } else {
-              // 훈련 완료
-              setIsRunning(false);
-              const currentLanguage = getCurrentLanguage();
-              speakTrainingComplete(currentLanguage);
-              onComplete();
-            }
-          }
-          return newRemaining <= 0 ? 0 : newRemaining;
-        }
-
-        // Progress 업데이트
-        updateProgress(currentRound, isBreathing, newRemaining);
-
-        return newRemaining;
-      });
-    }, 1000);
+    const runTick = () => tickRef.current();
+    runTick();
+    intervalRef.current = setInterval(runTick, TICK_INTERVAL_MS);
 
     return () => {
       if (intervalRef.current) {
@@ -132,17 +238,41 @@ export function useCO2TableTimer(
         intervalRef.current = null;
       }
     };
-  }, [
-    isRunning,
-    isPaused,
-    isBreathing,
-    currentRound,
-    holdTimeSeconds,
-    onComplete,
-    remainingSeconds,
-  ]);
+  }, [isRunning, isPaused]);
 
-  // 초기화 시 Progress 설정
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      const previousState = appStateRef.current;
+      appStateRef.current = nextState;
+
+      if (isBackgroundState(nextState)) {
+        // Clear interval when going to background to avoid unnecessary work
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+        stopSpeech();
+        return;
+      }
+
+      if (previousState && isBackgroundState(previousState) && nextState === 'active') {
+        stopSpeech();
+        reconcilePhaseAfterResumeRef.current();
+
+        // Restart interval when returning to foreground if training is active
+        if (isRunningRef.current && !isPaused) {
+          const runTick = () => tickRef.current();
+          runTick();
+          intervalRef.current = setInterval(runTick, TICK_INTERVAL_MS);
+        }
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   useEffect(() => {
     if (!isRunning && currentRound === 1 && isBreathing) {
       setBreatheProgress(100);
@@ -151,34 +281,67 @@ export function useCO2TableTimer(
   }, [isRunning, currentRound, isBreathing]);
 
   const start = () => {
+    if (isRunningRef.current) {
+      return;
+    }
+
+    isRunningRef.current = true;
     setIsRunning(true);
     setIsPaused(false);
-    isPhaseStartRef.current = true;
+    startPhase(1, true);
   };
 
   const pause = () => {
+    if (!isRunningRef.current || isPaused) {
+      return;
+    }
+
+    if (phaseEndsAtRef.current) {
+      pausedRemainingMsRef.current = Math.max(0, phaseEndsAtRef.current - Date.now());
+    } else {
+      pausedRemainingMsRef.current = remainingSeconds * 1000;
+    }
+
+    phaseEndsAtRef.current = null;
     setIsPaused(true);
     stopSpeech();
   };
 
   const resume = () => {
+    if (!isRunningRef.current || !isPaused) {
+      return;
+    }
+
+    const remainingMs =
+      pausedRemainingMsRef.current ?? Math.max(0, remainingSeconds * 1000);
+
+    phaseEndsAtRef.current = Date.now() + remainingMs;
+    pausedRemainingMsRef.current = null;
     setIsPaused(false);
+    isPhaseStartRef.current = false;
+    stopSpeech();
+    const currentLanguage = getCurrentLanguage();
+    speakForTimer(msToSeconds(remainingMs), isBreathingRef.current, true, currentLanguage);
   };
 
   const complete = () => {
+    if (!isRunningRef.current) {
+      return;
+    }
+
+    isRunningRef.current = false;
     setIsRunning(false);
+    setIsPaused(false);
     stopSpeech();
+    resetTimerVisuals();
     onComplete();
   };
 
   const cancel = () => {
+    isRunningRef.current = false;
     setIsRunning(false);
     setIsPaused(false);
-    setCurrentRound(1);
-    setIsBreathing(true);
-    setRemainingSeconds(CO2_TABLE_BREATHE_TIMES[0]);
-    setBreatheProgress(100);
-    setHoldProgress(100);
+    resetTimerVisuals();
     stopSpeech();
     onCancel();
   };
