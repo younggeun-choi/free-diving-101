@@ -22,11 +22,12 @@ import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Progress } from '@/shared/ui/progress';
 import { Text } from '@/shared/ui/text';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTrainingHistory } from '@/stores';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 export default function CO2TableScreen() {
   const { t } = useTranslation();
@@ -77,6 +78,41 @@ export default function CO2TableScreen() {
     onComplete: handleComplete,
     onCancel: handleCancel,
   });
+
+  // Keep screen awake during active training
+  useEffect(() => {
+    const KEEP_AWAKE_TAG = 'co2-table-training';
+    let keepAwakeEnabled = false;
+
+    const enableKeepAwake = async () => {
+      try {
+        await activateKeepAwakeAsync(KEEP_AWAKE_TAG);
+        keepAwakeEnabled = true;
+      } catch (error) {
+        console.warn('Failed to activate keep-awake:', error);
+      }
+    };
+
+    const disableKeepAwake = async () => {
+      if (!keepAwakeEnabled) return;
+      keepAwakeEnabled = false;
+      try {
+        await deactivateKeepAwake(KEEP_AWAKE_TAG);
+      } catch (error) {
+        console.warn('Failed to deactivate keep-awake:', error);
+      }
+    };
+
+    if (isRunning && !isPaused) {
+      enableKeepAwake();
+    } else {
+      disableKeepAwake();
+    }
+
+    return () => {
+      disableKeepAwake();
+    };
+  }, [isRunning, isPaused]);
 
   const handleDecreaseHoldTime = useCallback(() => {
     setHoldTimeSeconds((prev) => {
