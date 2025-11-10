@@ -42,7 +42,8 @@ describe('Jest Setup Sanity Check', () => {
 
     expect(uuid).toBeDefined();
     expect(typeof uuid).toBe('string');
-    expect(uuid).toMatch(/^test-uuid-/);
+    // Should match UUID v4 format (8-4-4-4-12 hex digits)
+    expect(uuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
   });
 
   it('expo-speech mock이 사용 가능함', async () => {

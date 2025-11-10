@@ -6,9 +6,13 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
-// Mock expo-crypto
+// Mock expo-crypto with valid UUID v4 format
 jest.mock('expo-crypto', () => ({
-  randomUUID: jest.fn(() => `test-uuid-${Math.random().toString(36).substring(2, 11)}`),
+  randomUUID: jest.fn(() => {
+    // Generate a valid UUID v4 format for testing
+    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    return `${s4()}${s4()}-${s4()}-4${s4().substring(1)}-${s4()}-${s4()}${s4()}${s4()}`;
+  }),
 }));
 
 // Mock expo-speech
