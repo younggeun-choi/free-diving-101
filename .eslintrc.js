@@ -16,6 +16,7 @@ module.exports = {
   env: {
     es2021: true,
     node: true,
+    jest: true,
   },
   rules: {
     'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -26,5 +27,6 @@ module.exports = {
     '.expo/',
     'dist/',
     '*.config.js',
+    '__tests__/setup/',
   ],
 };
