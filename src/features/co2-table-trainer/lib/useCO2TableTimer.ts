@@ -107,10 +107,8 @@ export function useCO2TableTimer(options: UseCO2TableTimerOptions): UseCO2TableT
     isRunningRef.current = false;
     setIsRunning(false);
     setIsPaused(false);
-    phaseEndsAtRef.current = null;
-    pausedRemainingMsRef.current = null;
-    isPhaseStartRef.current = false;
     stopSpeech();
+    resetTimerVisuals();
     const currentLanguage = getCurrentLanguage();
     speakTrainingComplete(currentLanguage);
     onComplete();
