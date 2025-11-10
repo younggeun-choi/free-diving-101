@@ -22,7 +22,7 @@ import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Progress } from '@/shared/ui/progress';
 import { Text } from '@/shared/ui/text';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -39,7 +39,7 @@ export default function CO2TableScreen() {
   const [isTrainingComplete, setIsTrainingComplete] = useState(false);
   const [trainingStartTime, setTrainingStartTime] = useState<Date | null>(null);
 
-  const handleComplete = useCallback(() => {
+  const handleComplete = () => {
     if (trainingStartTime) {
       addSession({
         type: 'co2-table',
@@ -54,11 +54,11 @@ export default function CO2TableScreen() {
       });
     }
     setIsTrainingComplete(true);
-  }, [addSession, holdTimeSeconds, trainingStartTime]);
+  };
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     setShowCancelDialog(false);
-  }, []);
+  };
 
   const {
     currentRound,
@@ -114,7 +114,7 @@ export default function CO2TableScreen() {
     };
   }, [isRunning, isPaused]);
 
-  const handleDecreaseHoldTime = useCallback(() => {
+  const handleDecreaseHoldTime = () => {
     setHoldTimeSeconds((prev) => {
       const newValue = prev - HOLD_TIME_STEP_SECONDS;
       if (newValue < MIN_HOLD_TIME_SECONDS) {
@@ -123,9 +123,9 @@ export default function CO2TableScreen() {
       }
       return newValue;
     });
-  }, []);
+  };
 
-  const handleIncreaseHoldTime = useCallback(() => {
+  const handleIncreaseHoldTime = () => {
     setHoldTimeSeconds((prev) => {
       const newValue = prev + HOLD_TIME_STEP_SECONDS;
       if (newValue > MAX_HOLD_TIME_SECONDS) {
@@ -134,29 +134,29 @@ export default function CO2TableScreen() {
       }
       return newValue;
     });
-  }, []);
+  };
 
-  const handleCancelPress = useCallback(() => {
+  const handleCancelPress = () => {
     setShowCancelDialog(true);
-  }, []);
+  };
 
-  const handleCancelConfirm = useCallback(() => {
+  const handleCancelConfirm = () => {
     cancel();
     setShowCancelDialog(false);
-  }, [cancel]);
+  };
 
-  const handleCompletePress = useCallback(() => {
+  const handleCompletePress = () => {
     complete();
-  }, [complete]);
+  };
 
-  const handleCompletedOk = useCallback(() => {
+  const handleCompletedOk = () => {
     setIsTrainingComplete(false);
-  }, []);
+  };
 
-  const handleStart = useCallback(() => {
+  const handleStart = () => {
     setTrainingStartTime(new Date());
     start();
-  }, [start]);
+  };
 
   const totalTime = calculateTotalTime(CO2_TABLE_BREATHE_TIMES, holdTimeSeconds);
 
