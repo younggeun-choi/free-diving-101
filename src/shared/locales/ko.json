@@ -220,13 +220,13 @@
     "breathe": "숨 쉬세요",
     "hold": "참으세요",
     "minutes": {
-      "three": "삼분",
-      "two": "이분",
-      "one": "일분"
+      "three": "삼 분",
+      "two": "이 분",
+      "one": "일 분"
     },
     "seconds": {
-      "thirty": "삼십초",
-      "ten": "십초",
+      "thirty": "삼십 초",
+      "ten": "십 초",
       "five": "오",
       "four": "사",
       "three": "삼",

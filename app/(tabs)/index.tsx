@@ -40,37 +40,39 @@ export default function HomeScreen() {
   }
 
   return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom + 20 }}
-    >
-      <View className="p-4 gap-6">
-        {/* Greeting Section */}
-        <GreetingSection streak={streak} />
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: insets.bottom }}
+      >
+        <View className="p-4 gap-6">
+          {/* Greeting Section */}
+          <GreetingSection streak={streak} />
 
-        {/* Quick Actions */}
-        <QuickActionsSection
-          completedDays={completedDays}
-          nextDay={nextDay}
-          co2Sessions={co2Sessions}
-          hasSessions={sessions.length > 0}
-          sessionCount={sessions.length}
-        />
+          {/* Quick Actions */}
+          <QuickActionsSection
+            completedDays={completedDays}
+            nextDay={nextDay}
+            co2Sessions={co2Sessions}
+            hasSessions={sessions.length > 0}
+            sessionCount={sessions.length}
+          />
 
-        {/* Progress Section */}
-        <ProgressSection
-          completedDays={completedDays}
-          totalTime={totalTime}
-          streak={streak}
-          lastSession={sessions[0]}
-        />
+          {/* Progress Section */}
+          <ProgressSection
+            completedDays={completedDays}
+            totalTime={totalTime}
+            streak={streak}
+            lastSession={sessions[0]}
+          />
 
-        {/* Recent Activity */}
-        {recentSessions.length > 0 && (
-          <RecentActivitySection sessions={recentSessions} />
-        )}
-      </View>
-    </ScrollView>
+          {/* Recent Activity */}
+          {recentSessions.length > 0 && (
+            <RecentActivitySection sessions={recentSessions} />
+          )}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -331,7 +333,7 @@ function ActivityCard({ session }: { session: TrainingSession }) {
               <Badge variant={badgeVariant}>
                 <Text variant="small">{badgeLabel}</Text>
               </Badge>
-              <Text variant="p" className="flex-1">
+              <Text className="flex-1">
                 {title}
               </Text>
             </View>
@@ -353,84 +355,85 @@ function EmptyState({ insets }: { insets: { top: number; bottom: number } }) {
   const { t } = useTranslation();
 
   return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentContainerStyle={{
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom + 20,
-        flexGrow: 1,
-        justifyContent: 'center',
-      }}
-    >
-      <View className="p-6 gap-6 items-center">
-        <View className="gap-3 items-center">
-          <Text variant="h1" className="text-center">
-            {t('home.welcome')}
-          </Text>
-          <Text variant="p" className="text-center text-muted-foreground">
-            {t('home.readyToStart')}
-          </Text>
-        </View>
-
-        <View className="w-full gap-4 mt-4">
-          <Text variant="h3" className="text-center">
-            {t('home.startJourney')}
-          </Text>
-
-          {/* Start Frenzel Training */}
-          <Card>
-            <CardContent className="p-4">
-              <Pressable
-                onPress={() => router.push('/(tabs)/equalizing')}
-                className="active:opacity-70"
-              >
-                <View className="gap-2">
-                  <Text variant="h3">{t('home.startTraining')}</Text>
-                  <Text variant="p" className="text-muted-foreground">
-                    {t('timer.day', { number: 1 })}:{' '}
-                    {t(FRENZEL_TRAINING_SCHEDULE[0].title)}
-                  </Text>
-                  <Text variant="small" className="text-muted-foreground">
-                    {FRENZEL_TRAINING_SCHEDULE[0].durationMinutes}{' '}
-                    {t('timer.minutes')}
-                  </Text>
-                </View>
-              </Pressable>
-            </CardContent>
-          </Card>
-
-          <Text variant="p" className="text-center text-muted-foreground">
-            {t('home.or')}
-          </Text>
-
-          {/* Start CO₂ Table */}
-          <Card>
-            <CardContent className="p-4">
-              <Pressable
-                onPress={() => router.push('/(tabs)/co2-table')}
-                className="active:opacity-70"
-              >
-                <View className="gap-2">
-                  <Text variant="h3">{t('home.quickCO2')}</Text>
-                  <Text variant="p" className="text-muted-foreground">
-                    {t('home.breathTraining')}
-                  </Text>
-                </View>
-              </Pressable>
-            </CardContent>
-          </Card>
-
-          {/* Learn More */}
-          <Pressable
-            onPress={() => router.push('/(tabs)/equalizing')}
-            className="mt-4"
-          >
-            <Text variant="p" className="text-center text-primary">
-              {t('home.learnMore')} →
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{
+          paddingBottom: insets.bottom,
+          flexGrow: 1,
+          justifyContent: 'center',
+        }}
+      >
+        <View className="p-6 gap-6 items-center">
+          <View className="gap-3 items-center">
+            <Text variant="h1" className="text-center">
+              {t('home.welcome')}
             </Text>
-          </Pressable>
+            <Text variant="p" className="text-center text-muted-foreground">
+              {t('home.readyToStart')}
+            </Text>
+          </View>
+
+          <View className="w-full gap-4 mt-4">
+            <Text variant="h3" className="text-center">
+              {t('home.startJourney')}
+            </Text>
+
+            {/* Start Frenzel Training */}
+            <Card>
+              <CardContent className="p-4">
+                <Pressable
+                  onPress={() => router.push('/(tabs)/equalizing')}
+                  className="active:opacity-70"
+                >
+                  <View className="gap-2">
+                    <Text variant="h3">{t('home.startTraining')}</Text>
+                    <Text variant="p" className="text-muted-foreground">
+                      {t('timer.day', { number: 1 })}:{' '}
+                      {t(FRENZEL_TRAINING_SCHEDULE[0].title)}
+                    </Text>
+                    <Text variant="small" className="text-muted-foreground">
+                      {FRENZEL_TRAINING_SCHEDULE[0].durationMinutes}{' '}
+                      {t('timer.minutes')}
+                    </Text>
+                  </View>
+                </Pressable>
+              </CardContent>
+            </Card>
+
+            <Text variant="p" className="text-center text-muted-foreground">
+              {t('home.or')}
+            </Text>
+
+            {/* Start CO₂ Table */}
+            <Card>
+              <CardContent className="p-4">
+                <Pressable
+                  onPress={() => router.push('/(tabs)/co2-table')}
+                  className="active:opacity-70"
+                >
+                  <View className="gap-2">
+                    <Text variant="h3">{t('home.quickCO2')}</Text>
+                    <Text variant="p" className="text-muted-foreground">
+                      {t('home.breathTraining')}
+                    </Text>
+                  </View>
+                </Pressable>
+              </CardContent>
+            </Card>
+
+            {/* Learn More */}
+            <Pressable
+              onPress={() => router.push('/(tabs)/equalizing')}
+              className="mt-4"
+            >
+              <Text variant="p" className="text-center text-primary">
+                {t('home.learnMore')} →
+              </Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
