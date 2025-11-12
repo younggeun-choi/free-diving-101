@@ -20,9 +20,9 @@
     --primary: 174 44% 55%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Cream */
-    --secondary: 34 64% 89%;
-    --secondary-foreground: 180 64% 29%;
+    /* Secondary - Slate Blue */
+    --secondary: 200 35% 45%;
+    --secondary-foreground: 0 0% 100%;
 
     /* Muted - Cream */
     --muted: 34 64% 89%;
@@ -63,9 +63,9 @@
     --primary: 172 48% 69%;
     --primary-foreground: 180 73% 15%;
 
-    /* Secondary - Dark Teal */
-    --secondary: 180 40% 25%;
-    --secondary-foreground: 40 100% 94%;
+    /* Secondary - Slate Blue */
+    --secondary: 200 30% 70%;
+    --secondary-foreground: 180 73% 15%;
 
     /* Muted */
     --muted: 180 35% 25%;
